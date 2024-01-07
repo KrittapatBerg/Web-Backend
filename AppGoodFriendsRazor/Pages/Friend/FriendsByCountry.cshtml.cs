@@ -45,18 +45,17 @@ namespace AppGoodFriendsRazor.Pages.Friend
             //var friendInCountry = friends
             var lala = await service.ReadAddressesAsync(usr, true, false, "", 0, 100);
 
-            Countries = lala
-                .Where(c => c.Address != null && !string.IsNullOrEmpty(c.Address.Country))
-                .GroupBy(c => c.Address.Country)
-                .Select(c => new CountryForFriend
-                {
-                    Land = c.Key,
-                    TotalFriend = c.Count(),
-                    TotalCity = c.Count()
-                })
-                .ToList();
-
-
+            /*   Countries = lala
+                   .Where(c => c.Address != null && !string.IsNullOrEmpty(c.Address.Country))
+                   .GroupBy(c => c.Address.Country)
+                   .Select(c => new CountryForFriend
+                   {
+                       Land = c.Key,
+                       TotalFriend = c.Count(),
+                       TotalCity = c.Count()
+                   })
+                   .ToList();
+               */
 
             /* I started with this block 
             FriendByCountries = friendByCountry;
