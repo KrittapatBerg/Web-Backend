@@ -1,0 +1,97 @@
+﻿@page
+@model AppGoodFriendsRazor.Pages.Friend.FriendListModel
+@{
+    ViewData["Title"] = "List of friends in a city";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@attribute [IgnoreAntiforgeryToken]
+
+<div class="container px-4 py-4" id="friends-in-a-country">
+    <h2 class="pb-2 border-bottom">Friends in c </h2>
+    <p>Click on a city below to see my friends who living in that city.</p>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
+        <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#backpack" /></svg>
+            @foreach (var friendsByCountry in Model.FriendsByCountries)
+            {
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">@friendsByCountry.Countries</h3>
+                <div>
+                    
+                    @foreach (var friend in friendsByCountry.Cities)
+                    {
+                    <p>@friend.NrFriends in @friend.City</p>
+                    <a href="~/Friend/ListOfFriend?city=" class="btn btn-primary">
+                    See friends </a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+    @*@foreach (var group in Model.Countries)
+    {
+        @foreach(var friend in group)
+        {
+            <h4>@friend.FirstName @friend.LastName</h4>
+            <div>@friend</div>
+        } 
+    }*@
+
+<div class="container px-4 py-4" id="friends-in-a-country">
+    <h2 class="pb-2 border-bottom">Friends in Sweden</h2>
+    <p>Click in on a city below to see my friends living in that city.</p>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
+        <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#backpack" /></svg>
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Stockholm</h3>
+                <p>15 friends and 52 pets.</p>
+                <a href="#list-of-friends" class="btn btn-primary">
+                    See friends
+                </a>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#home" /></svg>
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Gothenburg</h3>
+                <p>15 friends and 52 pets.</p>
+                <a href="#list-of-friends" class="btn btn-primary">
+                    See friends
+                </a>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#home" /></svg>
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Malmo</h3>
+                <p>15 friends and 52 pets.</p>
+                <a href="#list-of-friends" class="btn btn-primary">
+                    See friends
+                </a>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#home" /></svg>
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Gavle</h3>
+                <p>15 friends and 52 pets.</p>
+                <a href="#list-of-friends" class="btn btn-primary">
+                    See friends
+                </a>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#home" /></svg>
+            <div>
+                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Akersberga</h3>
+                <p>15 friends and 52 pets.</p>
+                <a href="#list-of-friends" class="btn btn-primary">
+                    See friends
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

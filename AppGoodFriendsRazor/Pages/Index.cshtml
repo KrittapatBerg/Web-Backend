@@ -1,0 +1,89 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container px-4 py-4" id="home">
+    <div class="bg-body-tertiary p-5 rounded">
+        <div class="col-sm-8 py-5 mx-auto">
+            <h1 class="display-4 fw-bold">Welcome to</h1>
+            <h2 class="display-5 fw-bold"> Good Friends Razor page by Quan </h2>
+            <h5 class="fs-5"> Choose the menu above to browse through our good friends 😇 <br />
+                or simply click the button down here </h5>
+            <p>
+                <a class="btn btn-primary" href="~/Friend/FriendsByCountry" role="button">See good friends</a>
+            </p>
+            <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        </div>
+
+        @*<div>
+            <ul>
+                @foreach (var item in Model.FriendsByCountries)
+                {
+                    <li>
+                        @item.Countries  
+                        @item.Cities.Sum(a => a.NrFriends)
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div> 
+            <ul>
+                @foreach (var pet in Model.FriendPetByCities)
+                {
+                    <li>Nr of friends @pet.NrFriends</li>
+                    <li>Nr of pets @pet.NrPets</li>
+                }
+            </ul>
+        </div> *@
+
+        <h1>Friends and Pets by Country and City</h1>
+
+        <!-- Display Friends by Country -->
+        <h2>Friends by Country</h2>
+        @foreach (var friendsByCountry in Model.FriendsByCountries)
+        {
+            <h3>@friendsByCountry.Countries</h3>
+            @foreach (var friend in friendsByCountry.Cities)
+            {
+                <p>@friend.NrFriends in @friend.City</p>
+            }
+        }
+
+        <!-- Display Friends and Pets by City -->
+        <h2>Friends and Pets by City</h2>
+        @foreach (var friendPetByCity in Model.FriendPetByCities)
+        {
+            <h3>@friendPetByCity.City</h3>
+            <p>Number of Friends: @friendPetByCity.NrFriends</p>
+            <p>Number of Pets: @friendPetByCity.NrPets</p>
+
+            @if (friendPetByCity.Pets != null && friendPetByCity.Pets.Any())
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pet Name</th>
+                            <!-- Add other columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pet in friendPetByCity.Pets)
+                        {
+                            <tr>
+                                <td>@pet.NrPets</td>
+                                <!-- Add other cells as needed -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No pets for this city.</p>
+            }
+        }
+    </div>
+</div>

@@ -1,8 +1,7 @@
-﻿using System;
-namespace Models
+﻿namespace Models
 {
-	public interface IFriend
-	{
+    public interface IFriend
+    {
         public Guid FriendId { get; set; }
 
         public string FirstName { get; set; }

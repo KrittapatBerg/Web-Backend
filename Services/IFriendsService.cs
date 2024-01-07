@@ -1,11 +1,10 @@
-﻿using System;
-using Models;
+﻿using Models;
 using Models.DTO;
 
 namespace Services
 {
     public interface IFriendsService
-	{
+    {
         //To test the overall layered structure
         public string InstanceHello { get; }
 

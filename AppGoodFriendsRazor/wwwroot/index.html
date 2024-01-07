@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Martin Lenart, Seido AB">
+    <title>Goodfriends</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="./favicon_io/site.webmanifest">  
+
+
+    <!-- Bootstrap styles from their respective templates -->
+    <link href="./css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/bootstrap/navbars-offcanvas.css" rel="stylesheet">
+    <link href="./css/bootstrap/features.css" rel="stylesheet">
+    <link href="./css/bootstrap/grid.css" rel="stylesheet">
+    <link href="./css/bootstrap/sign-in.css" rel="stylesheet">
+    <link href="./css/bootstrap/modals.css" rel="stylesheet">
+
+    <!-- Application styles -->
+    <link href="./css/goodfriends.css" rel="stylesheet">
+
+    <!-- Bootstrap cool colormode changer -->
+    <script src="./script/bootstrap/color-modes.js"></script>
+  </head>
+
+  <body>
+    <!--Part of page Frame -->
+    <!-- Dark/light mode selection hoover -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+      <symbol id="check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+      </symbol>
+      <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+      </symbol>
+      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+      </symbol>
+      <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+      </symbol>
+    </svg>
+    
+    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+      <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
+              id="bd-theme"
+              type="button"
+              aria-expanded="false"
+              data-bs-toggle="dropdown"
+              aria-label="Toggle theme (auto)">
+        <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#circle-half"></use></svg>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#sun-fill"></use></svg>
+            Light
+            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>
+            Dark
+            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#circle-half"></use></svg>
+            Auto
+            <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+    
+    <!--Part of page Frame -->
+    <!-- Icons used -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+      <symbol id="home" viewBox="0 0 16 16">
+        <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+      </symbol>
+      <symbol id="backpack" viewBox="0 0 16 16">
+        <path d="M4.04 7.43a4 4 0 0 1 7.92 0 .5.5 0 1 1-.99.14 3 3 0 0 0-5.94 0 .5.5 0 1 1-.99-.14M4 9.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm1 .5v3h6v-3h-1v.5a.5.5 0 0 1-1 0V10z"/>
+        <path d="M6 2.341V2a2 2 0 1 1 4 0v.341c2.33.824 4 3.047 4 5.659v5.5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5V8a6.002 6.002 0 0 1 4-5.659M7 2v.083a6.04 6.04 0 0 1 2 0V2a1 1 0 0 0-2 0m1 1a5 5 0 0 0-5 5v5.5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5V8a5 5 0 0 0-5-5"/>
+      </symbol>
+    </svg>
+
+    <main>
+      <!--Part of page Frame -->
+      <!--Header and collapsable menu -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Offcanvas navbar large">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#home">My good friends and their pets</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasNavbar2Label">Offcanvas</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#home">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#list-of-quotes">All quotes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#list-of-friends">All friends</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Users
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#sign-in">Sign in</a></li>
+                    <li><a class="dropdown-item" href="#modals">Sign out</a></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#register">Register</a></li>
+                  </ul>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+      <!--Individual Pages, will become individual pages in final application that uses the page Frame -->
+      <!--Page home or index -->
+      <div class="container px-4 py-4" id="home">
+        <div class="bg-body-tertiary p-5 rounded">
+          <div class="col-sm-8 py-5 mx-auto">
+            <h1 class="display-5 fw-normal">WebApi consumer example</h1>
+              <p class="fs-5">This example is part of the ASP.NET Web Development course, and shows how to combine ASP.NET MVC, Razorpages, which is C# and .NET backend, 
+              with css and javascript from Bootstrap in the frontend.</p>
+            
+              <p>We build a Webapplication that communicates and consume the services of the with the goodfriends WebApi that we build in the .NET Data Access course.</p>
+              <p>Using the <a href="https://goodfriends.azurewebsites.net/swagger/index.html">WebApi services</a>, we read and manipulate the data in the code-first database we created and populated in
+              the .NET Data Access course. Enjoy!</p>
+            <p>
+              <a class="btn btn-primary" href="#friends-by-country" role="button">See my friends</a>
+            </p>
+        </div>
+      </div>
+      </div>
+
+      <!-- Page friends-by-country -->
+      <div class="container px-4 py-4" id="friends-by-country">
+        <h2 class="pb-2 border-bottom">Friends by country</h2>
+        <p>Click in on a country below to see what cities my friends are living in.</p>
+    
+        <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+          <a href="#friends-in-a-country" class="text-decoration-none">
+            <div class="col">
+              <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('./img/unsplash-photo-3.jpg');">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                  <h3 class="pt-1 mt-1 mb-4 display-6 lh-1 fw-bold">Sweden</h3>
+                    <p class="fs-5">300 Friends in 5 cities</p>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a href="#friends-in-a-country" class="text-decoration-none">
+            <div class="col">
+              <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('./img/unsplash-photo-2.jpg');">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                  <h3 class="pt-1 mt-1 mb-4 display-6 lh-1 fw-bold">Norway</h3>
+                    <p class="fs-5">150 Friends in 7 cities</p>
+                </div>
+              </div>
+            </div>
+          </a>
+    
+          <a href="#friends-in-a-country" class="text-decoration-none">
+            <div class="col">
+              <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('./img/unsplash-photo-3.jpg');">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                  <h3 class="pt-1 mt-1 mb-4 display-6 lh-1 fw-bold">Denmark</h3>
+                    <p class="fs-5">200 Friends in 3 cities</p>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a href="#friends-in-a-country" class="text-decoration-none">
+            <div class="col">
+              <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('./img/unsplash-photo-2.jpg');">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                  <h3 class="pt-1 mt-1 mb-4 display-6 lh-1 fw-bold">Finland</h3>
+                    <p class="fs-5">235 Friends in 9 cities</p>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a href="#friends-in-a-country" class="text-decoration-none">
+            <div class="col">
+              <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('./img/unsplash-photo-3.jpg');">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                  <h3 class="pt-1 mt-1 mb-4 display-6 lh-1 fw-bold">Unknown</h3>
+                    <p class="fs-5">435 Friends</p>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Page friends-in-a-country -->
+      <div class="container px-4 py-4" id="friends-in-a-country">
+        <h2 class="pb-2 border-bottom">Friends in Sweden</h2>
+        <p>Click in on a city below to see my friends living in that city.</p>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
+          <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#backpack"/></svg>
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Stockholm</h3>
+              <p>15 friends and 52 pets.</p>
+              <a href="#list-of-friends" class="btn btn-primary">
+                See friends
+              </a>    
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#home"/></svg>
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Gothenburg</h3>
+              <p>15 friends and 52 pets.</p>
+              <a href="#list-of-friends" class="btn btn-primary">
+                See friends
+              </a>    
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#home"/></svg>
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Malmo</h3>
+              <p>15 friends and 52 pets.</p>
+              <a href="#list-of-friends" class="btn btn-primary">
+                See friends
+              </a>    
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#home"/></svg>
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Gavle</h3>
+              <p>15 friends and 52 pets.</p>
+              <a href="#list-of-friends" class="btn btn-primary">
+                See friends
+              </a>    
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#home"/></svg>
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Akersberga</h3>
+              <p>15 friends and 52 pets.</p>
+              <a href="#list-of-friends" class="btn btn-primary">
+                See friends
+              </a>    
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page list-of-friends -->
+      <div class="container px-4 py-4" id="list-of-friends">
+        <h2 class="pb-2 border-bottom">List of friends</h2>
+
+        <p>These are my friends. You can seach by name or address. You can also view or edit all the details. Sad but possible, if you have the right authorization you 
+          could also remove a friened from my database. More fun is it to add a friend, which all my friends can do.</p>
+        <div class="row mb-1 text-center">
+          <div class="col-md-8 ">
+            <form class="d-flex mt-3 mt-lg-0" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="row mb-2 text-center">
+          <div class="col-md-4 themed-grid-col">Name</div>
+          <div class="col-md-4 themed-grid-col">Address</div>
+          <div class="col-md-2 themed-grid-col">Info</div>
+          <div class="col-md-2 themed-grid-col">
+              <a href="#add-edit-friend" class="btn btn-success btn-sm" type="button">Add</a>
+          </div>
+        </div>
+        <div class="row mb-2 text-center">
+          <div class="col-md-4 themed-grid-col">
+            Tim Baggins
+            <div class="col-md-16">tim.baggins@icloud.com</div>
+          </div>
+          <div class="col-md-4 themed-grid-col">
+            Ringvagen 1
+            <div class="col-md-16">123 45 Stockholm</div>
+            <div class="col-md-16">Sweden</div>
+          </div>
+          <div class="col-md-2 themed-grid-col">
+            <div class="col-md-16">Born: 1983-03-25</div>
+            <div class="col-md-16">Pets: 5</div>
+            <div class="col-md-16">Quotes: 3</div>
+          </div>
+          <div class="col-md-2 themed-grid-col">
+              <a href="#view-friend" class="btn btn-primary btn-sm" type="button">View</a>
+              <a href="#add-edit-friend"  class="btn btn-secondary btn-sm" type="button">Edit</a>
+              <a href="#modals"  class="btn btn-danger btn-sm" type="button">Delete</a>
+          </div>
+        </div>
+        <nav aria-label="Standard pagination example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#list-of-friends" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">1</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">2</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">3</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">4</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">5</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">6</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">7</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">8</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">9</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-friends">10</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#list-of-friends" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+    
+      </div>
+
+      <!-- Page add-edit-friend-detail -->
+      <div class="container px-4 py-4" id="add-edit-friend">
+        <h2 class="pb-2 border-bottom">Add or edit a friend's details</h2>
+        <p>Fill in the details below to add a friend. Once you have added your friend you can edit the details of your fiend such as favorite quotes and pets.</p>
+  
+        <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+            <div class="col-md-7 col-lg-8">
+              <form class="needs-validation" novalidate>
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label for="firstName" class="form-label">First name</label>
+                    <input type="text" class="form-control is-invalid" id="firstName" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                      Valid first name is required
+                    </div>
+                  </div>
+      
+                  <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Last name</label>
+                    <input type="text" class="form-control is-invalid" id="lastName" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                      Valid last name is required
+                    </div>
+                  </div>
+              
+                  <div class="col-sm-6">
+                    <label for="email" class="form-label">Email <span class="text-body-secondary">(Optional)</span></label>
+                    <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                    <div class="invalid-feedback">
+                      Please enter a valid email address
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="birthday" class="form-label">Birthday <span class="text-body-secondary">(Optional)</span></label>
+                    <input type="date" class="form-control" id="birthday" placeholder="2000-01-01">
+                    <div class="invalid-feedback">
+                      Please enter a valid birthday
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label class="form-check-label" for="userHasAddress"></label>
+                    <input class="form-check-input" type="checkbox" value="" id="userHasAddress">
+                    I know the address
+               </div>
+                  
+                  <div class="row g-3 visible">
+                    <div class="col-12">
+                      <label for="address" class="form-label">Address</label>
+                      <input type="text" class="form-control is-invalid" id="address" required>
+                      <div class="invalid-feedback">
+                        Please enter a street address
+                      </div>
+                    </div>
+        
+                    <div class="col-md-3">
+                      <label for="zip" class="form-label">Zip</label>
+                      <input type="text" class="form-control is-invalid" id="zip" placeholder="" required>
+                      <div class="invalid-feedback">
+                        Please enter a zip code
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <label for="city" class="form-label">City</label>
+                      <input type="text" class="form-control is-invalid" id="city" required>
+                      <div class="invalid-feedback">
+                        Please enter a city
+                      </div>
+                    </div>
+        
+                    <div class="col-md-5">
+                      <label for="country" class="form-label">Country</label>
+                      <input type="text" type="text" class="form-control is-invalid" id="country" required>
+                      <div class="invalid-feedback">
+                        Please enter a country
+                      </div>
+                  </div>
+                </div>
+                </div>
+
+              <button class="w-100 btn btn-primary btn-lg my-4" type="submit">Save</button>
+              </form>
+            </div>
+        </div>
+      </div>
+
+      <!-- Page view-friend-detail -->
+      <div class="container px-4 py-4" id="view-friend">
+        <h2 class="pb-2 border-bottom">View details of a friend</h2>
+        <p>Below you find all the details of my friend. You can also modify the pets my friend has and the quotes he/she likes.</p>
+  
+        <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+            <div class="col-md-7 col-lg-8">
+              <form class="needs-validation" novalidate>
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label for="firstName" class="form-label">First name</label>
+                    <input type="text" class="form-control" id="firstName" value="Tim" required>
+                  </div>
+      
+                  <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Last name</label>
+                    <input type="text" class="form-control" id="lastName" value="Baggins" required>
+                  </div>
+              
+                  <div class="col-sm-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" value="tim.baggins@icloud.com">
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="birthday" class="form-label">Birthday</label>
+                    <input type="birthday" class="form-control" id="birthday" value="1983-03-25">
+                  </div>
+
+                  <div class="row g-3 visible">
+                    <div class="col-12">
+                      <label for="address" class="form-label">Address</label>
+                      <input type="text" class="form-control" id="address" value="Ringvagen 1"required>
+                    </div>
+        
+                    <div class="col-md-3">
+                      <label for="zip" class="form-label">Zip</label>
+                      <input type="text" class="form-control" id="zip" value="123 45" required>
+                    </div>
+
+                    <div class="col-md-4">
+                      <label for="city" class="form-label">City</label>
+                      <input type="text" class="form-control" id="city" value="Stockholm" required>
+                    </div>
+        
+                    <div class="col-md-5">
+                      <label for="country" class="form-label">Country</label>
+                      <input type="text"  class="form-control" id="country" value="Sweden" required>
+                  </div>
+                </div>
+                </div>
+
+              <a href="#add-edit-friend" class="w-100 btn btn-primary btn-lg my-4">Edit friend details</a>
+              </form>            
+            </div>
+            
+            <div class="col-md-7 col-lg-8">
+              <h3 class="pb-2">My friend's pets
+                <a  href="#add-edit-pet" class="btn btn-success btn-sm" type="button">Add</a>
+              </h3>
+
+              <div class="row mb-2 text-center">
+                <div class="col-md-10 themed-grid-col">Wanda the happy fish</div>
+                <div class="col-md-2 themed-grid-col">
+                    <a href="#add-edit-pet"  class="btn btn-secondary btn-sm" type="button">Edit</a>
+                    <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-7 col-lg-8">
+              <h3 class="pb-2">My friend's favorite quotes
+                <a href="#list-of-quotes" class="btn btn-success btn-sm" type="button">Add</a>
+              </h3>
+
+              <div class="row mb-2 text-center">
+                <div class="col-md-10 themed-grid-col">
+                  Before you marry a person, you should first make them use a computer with slow Internet to see who they really are.
+                  <div class="col-md-16  text-end">Will Ferrell</div>
+                </div>
+                <div class="col-md-2 themed-grid-col">
+                  <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- Page add-edit-pet-detail -->
+      <div class="container px-4 py-4" id="add-edit-pet">
+        <h2 class="pb-2 border-bottom">Add or edit a pet's details</h2>
+        <p>Fill in the details below to add a pet.</p>
+        <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+            <div class="col-md-7 col-lg-8">
+              <form class="needs-validation" novalidate>
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label for="petName" class="form-label">Name</label>
+                    <input type="text" class="form-control is-invalid" id="petName" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                      The pet must have a name
+                    </div>
+                  </div>
+      
+                  <div class="col-sm-6">
+                    <label for="petType" class="form-label">Type of animal</label>
+                    <select class="form-select is-invalid" id="petType" required>
+                      <option value="">Choose...</option>
+                      <option>Fish</option>
+                      <option>Dog</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Select an animal type
+                    </div>
+                  </div>
+              
+                  <div class="col-sm-6">
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="petMood" class="form-label">Mood of the pet</label>
+                    <select class="form-select is-invalid" id="petMood" required>
+                      <option value="">Choose...</option>
+                      <option>Happy</option>
+                      <option>Sleepy</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Select the mood of the pet
+                    </div>
+                  </div>
+                </div>
+
+              <button class="w-100 btn btn-primary btn-lg my-4" type="submit">Save</button>
+              </form>
+            </div>
+        </div>
+      </div>
+
+      <!-- Page list-of-quotes -->
+      <div class="container px-4 py-4" id="list-of-quotes">
+        <h2 class="pb-2 border-bottom">List of famous quotes</h2>
+
+        <p>Below are some famous quotes about love, work and the fact that tomorrow is another day. Select one that your friend likes.</p>
+        
+        <div class="row mb-1 text-center">
+            <span class="alert alert-danger" role="alert">
+                Page Error
+            </span>
+        </div>
+
+        <div class="row mb-1 text-center">
+          <div class="col-md-8 ">
+            <form class="d-flex mt-3 mt-lg-0" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="row mb-2 text-center">
+          <div class="col-md-10 themed-grid-col">
+            Before you marry a person, you should first make them use a computer with slow Internet to see who they really are.
+            <div class="col-md-16  text-end">Will Ferrell</div>
+          </div>
+          <div class="col-md-2 themed-grid-col">
+              <button class="btn btn-success btn-sm" type="button">Select</button>
+          </div>
+        </div>
+
+        <nav aria-label="Standard pagination example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#list-of-quotes" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#list-of-quotes">1</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-quotes">2</a></li>
+            <li class="page-item"><a class="page-link" href="#list-of-quotes">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#list-of-quotes" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+    
+      </div>
+      
+      <!-- Page Selections -->
+      <div class="container px-4 py-4" id="list-of-quotes">
+        <h2 class="pb-2 border-bottom">List of famous quotes</h2>
+
+        <p>Pick a famous quote.</p>
+        <form class="needs-validation" method="post" novalidate>
+            <div class="row mb-2 text-center">
+                <div class="col-md-10 themed-grid-col">
+                  <label for="quoteId" class="form-label">Dropdown Single Select</label>
+                    <select class="form-select" name="quoteId" id="quoteId"></select>
+                </div>
+                <div class="col-md-2 themed-grid-col">
+                  <button class="btn btn-success btn-sm" type="submit">Submit</button>
+              </div>
+            </div>
+            <div class="row mb-2 text-center">
+              <div class="col-md-10 themed-grid-col">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Default radio
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Default checked radio
+                  </label>
+                </div>
+              </div>
+            </div>
+        </form>
+        <div class="row mb-2 text-center">
+          <div class="col-md-10 themed-grid-col">
+              Submitted Quote
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Page sign-in -->
+      <div class="container px-4 py-4" id="sign-in">
+        <div class="form-signin w-100 m-auto">
+          <form>
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        
+            <div class="form-floating">
+              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+              <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+              <label for="floatingPassword">Password</label>
+            </div>
+        
+            <div class="form-check text-start my-3">
+              <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+                Remember me
+              </label>
+            </div>
+            <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Page register -->
+      <div class="container px-4 py-4" id="register">
+        <h2 class="pb-2 border-bottom">Register yourself</h2>
+
+        <p>If you register yourself you can start adding your friends, their pets and favorite quotes to the database. 
+          Great to have them all in one place</p>
+          <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+            <div class="col-md-7 col-lg-8">
+
+              <form class="needs-validation" novalidate>
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label for="userName" class="form-label">Username</label>
+                    <input type="text" class="form-control is-invalid" id="userName" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                       Username is required
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <label for="userEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control is-invalid" id="userEmail" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                       Email is required
+                    </div>
+                  </div>
+              
+                  <div class="col-sm-6">
+                    <label for="userPassword" class="form-label">Email</label>
+                    <input type="password" class="form-control is-invalid" id="userPassword" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                       Password is required
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                  </div>
+                  <div class="col-sm-6">
+                      <label class="form-check-label" for="userTCOk"></label>
+                        <input class="form-check-input is-invalid" type="checkbox" value="" id="userTCOk" required>
+                        Agree to terms and conditions
+                     
+                    <div class="invalid-feedback">
+                      You must agree before submitting.
+                    </div>
+                  </div>
+                </div>
+
+              <button class="w-100 btn btn-primary btn-lg my-4" type="submit">Register</button>
+              </form>
+
+
+          </div>
+        </div>
+      </div>
+
+      <!--INTERNAL PAGE, development only page, to test to launch Modals used by the individual pages -->
+      <div class="container px-4 py-4" id="modals">
+        <h2 class="pb-2 border-bottom">Modals</h2>
+        <p>Below are modals that can be used by the individual pages. Used for confirmation</p>
+        <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+          <div class="col-md-7 col-lg-8">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#softModal">
+              Launch soft modal - a modal that closes also if you click outside the modal or hit escape
+            </button>
+          </div>
+
+          <div class="col-md-7 col-lg-8">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#hardModal">
+              Launch hard modal - a modal that DO NOT close if you click outside the modal or hot escape
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!--Part of page Frame -->
+      <!--Modals used by the individual pages -->
+      <!-- Modal that closes also if you click outside the modal or hit escape -->
+      <div class="modal fade" id="softModal" tabindex="-1" aria-labelledby="softModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="softModalLabel">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Hello from modal
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal that DO NOT close if you click outside the modal or hot escape -->
+      <div class="modal fade" id="hardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="hardModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="hardModalLabel">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Hello from modal
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Part of page Frame -->
+      <!-- Footer with copyright notice -->
+      <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+          <div class="col-md-4 d-flex align-items-center">
+            <a href="./index.html" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+            <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2023 Seido AB</span>
+          </a>
+        </div>
+        </footer>
+      </div>
+    </main>
+
+      <!-- Bootstrap Javascript -->
+      <script src="./script/bootstrap/bootstrap.bundle.min.js"></script>
+
+      <!-- SeidoAB script helpers -->
+      <script src="./script/seido/modals.js"></script>
+      <script src="./script/seido/select-list-items.js"></script>
+  </body>
+</html>
