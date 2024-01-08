@@ -9,27 +9,24 @@
 <div class="container px-4 py-4" id="friends-by-country">
     <h2 class="pb-2 border-bottom">Friends by country</h2>
     <p>Click in on a country below to see what cities my friends are living in.</p>
-
-    @foreach (var group in Model.FriendsByCountries)
-    {
-        <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
-            <a href="~/Friend/FriendInCountry?country=@group.Countries" class="text-decoration-none">
+ 
+    <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+        @foreach(var gang in Model.FriendsByCountries)
+        {
+            <a href="~/Friend/FriendInCountry?country=@gang.Countries" class="text-decoration-none">
                 <div class="col">
-                    <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-                         style="background-image: url('https://images.pexels.com/photos/2098427/pexels-photo-2098427.jpeg');">
+                    <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('https://images.pexels.com/photos/2098427/pexels-photo-2098427.jpeg');">
                         <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                            <h3 class="pt-1 mt-1 mb-4 display-6 lh-1 fw-bold">@group.Countries</h3>
-                                <p class="fs-5"> Total @group.Cities.Sum(f => f.NrFriends) friends in @group.Cities.Count() cities </p> 
-                               @*
-                               @foreach(var friend in group.Cities)
-                                {   
-                                 <p class="fs-5"> Total @friend.NrFriends in @friend.Country </p>
-                                }
-                               *@ 
+                            <h3 class="pt-1 mt-1 mb-4 display-6 lh-1 fw-bold">@gang.Countries</h3>
+                            <p> Total friends: @gang.TotalFriends in @gang.TotalCities cities </p>
+                            @foreach (var friend in gang.Cities)
+                            {
+                                <p class="fs-5">@friend.NrFriends in @friend.City</p>
+                            }
                         </div>
-                    </div>   
+                    </div>
                 </div>
             </a>
-        </div>
-    }
+        }
+    </div>
 </div>
