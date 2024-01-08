@@ -8,12 +8,12 @@ namespace AppGoodFriendsRazor.Pages.Friend
     public class FriendsByCountryModel : PageModel
     {
         readonly IFriendsService service;
-        //public List<IFriend> Friends { get; set; } = new List<IFriend>();
 
         public List<FriendsByCountry> FriendsByCountries = new List<FriendsByCountry>();
+
+        //public List<IFriend> Friends { get; set; } = new List<IFriend>();
         //public List<CountryForFriend> Countries { get; set; } = new List<CountryForFriend>();
 
-        //public List<IGrouping<string, IFriend>> FriendByCountries { get; set; }   
 
         #region Constructor
         public FriendsByCountryModel(IFriendsService service)
@@ -108,6 +108,5 @@ namespace AppGoodFriendsRazor.Pages.Friend
             public int TotalCities { get; set; }
             public List<gstusrInfoFriendsDto> Cities { get; set; }
         }
-
     }
 }

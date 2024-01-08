@@ -1,49 +1,50 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Models;
 using Models.DTO;
 using Services;
 
 namespace AppGoodFriendsRazor.Pages.Friend
 {
-    public class FriendListModel : PageModel
+    public class FriendInCountryModel : PageModel
     {
         readonly IFriendsService service;
-        //readonly loginUserSessionDto usr;
 
-        public List<IFriend> Friends { get; set; } = new List<IFriend>();
         public List<FriendsByCountry> FriendsByCountries = new List<FriendsByCountry>();
+
+        //public List<IFriend> Friends { get; set; } = new List<IFriend>();
 
         public async Task<IActionResult> OnGetAsync(string country)
         {
-            //var info = await service.InfoAsync;
-            //var friends = info.Friends;
-            ////Friends = await service.ReadFriendsAsync(usr, true, false, "", 0, 50);
-            //var friendsByCountry = friends.GroupBy(f => f.Country);
-            //foreach (var item in friendsByCountry)
-            //{
-            //    //We start with this and build on it 
-            //    //var country = item.Key;
-            //    //var friendsInCountry = item.Where(f => f.City != null).ToList();
+            var info = await service.InfoAsync;
+            var countryList = info.Friends;
 
-            //    var f = new FriendsByCountry();
-            //    f.Countries = item.Key;
-            //    f.Cities = item.Where(f => f.City != null).ToList();
+            var gangByCountry = countryList.GroupBy(x => x.Country);
+            foreach (var gang in gangByCountry)
+            {
+                var f = new FriendsByCountry();
+                f.Countries = gang.Key;
+                f.Cities = gang.Where(x => x.City != null).ToList();
+                f.TotalFriends = f.Cities.Sum(x => x.NrFriends); //Correct
+                f.TotalCities = f.Cities.Count(); //Correct 
 
-            //    FriendsByCountries.Add(f);
+                FriendsByCountries.Add(f);
+            }
 
-            //}
             return Page();
         }
 
         public class FriendsByCountry
         {
             public string Countries { get; set; }
+            public int TotalFriends { get; set; }
+            public int TotalCities { get; set; }
             public List<gstusrInfoFriendsDto> Cities { get; set; }
         }
-        public FriendListModel(IFriendsService service)
+        #region Constructor 
+        public FriendInCountryModel(IFriendsService service)
         {
             this.service = service;
         }
+        #endregion 
     }
 }

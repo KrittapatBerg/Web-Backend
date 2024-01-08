@@ -1,5 +1,5 @@
 ﻿@page
-@model AppGoodFriendsRazor.Pages.Friend.FriendListModel
+@model AppGoodFriendsRazor.Pages.Friend.FriendInCountryModel
 @{
     ViewData["Title"] = "List of friends in a city";
 }
@@ -7,27 +7,25 @@
 @attribute [IgnoreAntiforgeryToken]
 
 <div class="container px-4 py-4" id="friends-in-a-country">
-    <h2 class="pb-2 border-bottom">Friends in c </h2>
-    <p>Click on a city below to see my friends who living in that city.</p>
+    @foreach ( var gang in Model.FriendsByCountries)
+    {
+        <h2 class="pb-2 border-bottom">Friends in @gang.Countries </h2>
+        <p>Click on a city below to see my friends who living in that city.</p>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
-        <div class="col d-flex align-items-start">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#backpack" /></svg>
-            @foreach (var friendsByCountry in Model.FriendsByCountries)
-            {
-                <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">@friendsByCountry.Countries</h3>
-                <div>
-                    
-                    @foreach (var friend in friendsByCountry.Cities)
-                    {
-                    <p>@friend.NrFriends in @friend.City</p>
-                    <a href="~/Friend/ListOfFriend?city=" class="btn btn-primary">
-                    See friends </a>
-                    }
-                </div>
-            }
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
+            <div class="col d-flex align-items-start">
+                <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#backpack" /></svg>
+                @foreach (var friends in gang.Cities)
+                {
+                    <div>
+                        <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">@friends.NrFriends in @friends.City</h3>
+                        <a href="~/Friend/ListOfFriend?city=" class="btn btn-primary"> See friends </a>
+                 
+                    </div>
+                }
+            </div>
         </div>
-    </div>
+    }
 </div>
     @*@foreach (var group in Model.Countries)
     {
@@ -38,7 +36,8 @@
         } 
     }*@
 
-@* @foreach (var friend in gang.Cities)
+@* Write out friends in country 
+    @foreach (var friend in gang.Cities)  
 {
     <p class="fs-5">@friend.NrFriends in @friend.City</p>
 }
