@@ -7,22 +7,28 @@
 @attribute [IgnoreAntiforgeryToken]
 
 <div class="container px-4 py-4" id="friends-in-a-country">
+
+    <div class="bi text-body-secondary flex-shrink-0 me-3" style="background-image: url('https://cdn-icons-png.flaticon.com/128/845/845022.png');"></div>
     @foreach ( var gang in Model.FriendsByCountries)
     {
+        <i class="bi bi-house"></i>
         <h2 class="pb-2 border-bottom">Friends in @gang.Countries </h2>
         <p>Click on a city below to see my friends who living in that city.</p>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
             <div class="col d-flex align-items-start">
-                <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#backpack" /></svg>
-                @foreach (var friends in gang.Cities)
-                {
-                    <div>
+                <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"></svg>
+
+                <div>
+                    @foreach (var friends in gang.Cities)
+                    {
                         <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">@friends.NrFriends in @friends.City</h3>
                         <a href="~/Friend/ListOfFriend?city=" class="btn btn-primary"> See friends </a>
-                 
-                    </div>
-                }
+                    }
+                </div>
+                
+
+                       
             </div>
         </div>
     }
@@ -36,6 +42,7 @@
         } 
     }*@
 
+    @* <div style="background-image: url('https://fontawesome.com/icons/house?f=classic&s=solid');"><i class="fa-solid fa-house"></i></div>*@
 @* Write out friends in country 
     @foreach (var friend in gang.Cities)  
 {
