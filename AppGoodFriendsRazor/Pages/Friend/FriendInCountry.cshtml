@@ -7,32 +7,45 @@
 @attribute [IgnoreAntiforgeryToken]
 
 <div class="container px-4 py-4" id="friends-in-a-country">
-    
-        
-        <h2 class="pb-2 border-bottom">Friends in Country </h2>
+    @foreach (var country in Model.Addresses)
+    {
+        <h2 class="pb-2 border-bottom">Friends in @country.Country </h2>
         <p>Click on a city below to see my friends who living in that city.</p>
-        
-    
-            
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
-        <div class="col d-flex align-items-start">
-            <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#backpack" /></svg>
-            <div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
+            <div class="col d-flex align-items-start">
+                <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em"><use xlink:href="#backpack" /></svg>
+                <div>
+                    @foreach (var gang in Model.Addresses)
+                    {
+                        var city = Model.Friends
+                        .Where(x => x.Address != null && x.Address.City == gang.City);
+                        <div>
+                            <h3 class="pb-2 border-bottom">Friends in @gang.City </h3>
+                            <p>@city.Count() friends </p>
+                            <p> @city.Sum(c => c.Pets.Count) pets </p>
+                            <a href="~/Friend/ListOfFriend?city=" class="btn btn-primary"> See friends </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+                    @* 
+                        From Shazia 
+                         <div>
                 @foreach ( var gang in Model.Addresses)
                 {
                     var city = Model.Friends
                         .Where(x => x.Address != null && x.Address.City == gang.City);
-                    <h3 class="pb-2 border-bottom">Friends in @gang.City </h3>
-                    <p>@city.Count() friends </p>
-                    <p> @city.Sum(c => c.Pets.Count) pets </p>
+                        <div>
+                            <h3 class="pb-2 border-bottom">Friends in @gang.City </h3>
+                            <p>@city.Count() friends </p>
+                            <p> @city.Sum(c => c.Pets.Count) pets </p>
+                            <a href="~/Friend/ListOfFriend?city=" class="btn btn-primary"> See friends </a>
+                        </div>
                 }
-                    <a href="~/Friend/ListOfFriend?city=" class="btn btn-primary"> See friends </a>
             </div>
-        </div>
-    </div>
-    
-</div>
-                    @* 
 
         @foreach (var friend in gang.Cities)
         {
