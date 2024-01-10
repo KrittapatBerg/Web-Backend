@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AppGoodFriendsRazor.Pages.Friend
+namespace AppGoodFriendsRazor.Pages.Edit
 {
-    public class FriendAndPetModel : PageModel
+    public class AddEditFriendModel : PageModel
     {
         public void OnGet()
         {
