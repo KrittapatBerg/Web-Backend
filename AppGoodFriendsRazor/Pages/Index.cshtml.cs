@@ -55,21 +55,6 @@ namespace AppGoodFriendsRazor.Pages
                 FriendPetByCities.Add(hasPet);
             }
 
-            /*var petList = friends.Join(pets, f => f.City, p => p.City, (f, p)
-                            => new FriendPetByCity()
-                            {
-                                City = f.City,
-                                NrFriends = f.NrFriends,
-                                NrPets = p.NrPets
-                            });
-            foreach (var pet in petList)
-            {
-                var hasPet = new FriendPetByCity();
-                hasPet.City = pet.City;
-                hasPet.Pets = pet.Count(hasPet => hasPet.City != null).ToList();
-
-                FriendPetByCities.Add(hasPet);
-            }*/
         }
 
         public class FriendsByCountry

@@ -29,7 +29,9 @@ namespace AppGoodFriendsRazor.Pages.Friend
             var info = await service.InfoAsync;
             var countryList = info.Friends;
 
-            var gangByCountry = countryList.GroupBy(x => x.Country);
+            var gangByCountry = countryList
+                .Where(x => x.Country != null)
+                .GroupBy(x => x.Country);
             foreach (var gang in gangByCountry)
             {
                 var f = new FriendsByCountry();
