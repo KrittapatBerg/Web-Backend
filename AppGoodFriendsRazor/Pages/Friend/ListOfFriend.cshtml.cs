@@ -31,7 +31,7 @@ namespace AppGoodFriendsRazor.Pages.Friend
         //public string Country { get; set; }
         //public string City { get; set; }
 
-        public async Task<IActionResult> OnGet() //string country, string city
+        public async Task<IActionResult> OnGetAsync() //string country, string city
         {
             //Country = country;
             //City = city;

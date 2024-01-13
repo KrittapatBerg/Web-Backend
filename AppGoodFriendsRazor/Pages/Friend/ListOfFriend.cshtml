@@ -11,7 +11,7 @@
 
     <p>
         These are my friends. You can seach by name or address. You can also view or edit all the details. Sad but possible, if you have the right authorization you
-        could also remove a friened from my database. More fun is it to add a friend, which all my friends can do.
+        could also remove a friened from my database. More fun is that you can add a friend, pet and quote. 
     </p>
     <div class="row mb-1 text-center">
         <div class="col-md-8 ">
@@ -27,7 +27,7 @@
         <div class="col-md-4 themed-grid-col">Address</div>
         <div class="col-md-2 themed-grid-col">Info</div>
         <div class="col-md-2 themed-grid-col">
-            <a href="#add-edit-friend" class="btn btn-success btn-sm" type="button">Add</a>
+            <a href="~/Edit/AddEditFriend" class="btn btn-success btn-sm" type="button">Add</a>
         </div>
     </div>
 
@@ -49,8 +49,8 @@
                 <div class="col-md-16">Quotes: @friend.Quotes.Count</div>
             </div>
             <div class="col-md-2 themed-grid-col">
-                <a href="~/Editview-friend" class="btn btn-primary btn-sm" type="button">View</a>
-                <a href="#add-edit-friend" class="btn btn-secondary btn-sm" type="button">Edit</a>
+                <a href="~/Edit/ViewFriendPetQuote" class="btn btn-primary btn-sm" type="button">View</a>
+                <a href="~/Edit/AddEditFriend" class="btn btn-secondary btn-sm" type="button">Edit</a>
                 <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
             </div>
         }
