@@ -83,7 +83,7 @@ namespace AppGoodFriendsRazor.Pages.Friend
         }
 
         //TODO: include pets and quotes 
-        //TODO: filter list of friends in just one city 
+        //Dont forget about the <a href> tag  
         #region Inject service
         public ListOfFriendModel(IFriendsService service, ILogger<ListOfFriendModel> logger)
         {
