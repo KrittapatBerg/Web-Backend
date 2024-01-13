@@ -51,33 +51,7 @@ namespace AppGoodFriendsRazor.Pages.Friend
             FriendsList = friendInCity;
 
             return Page();
-            //FriendsList = friendInfo;
-            //foreach (var item in friendInfo)
-            //{
-            //    var f = new csFriendListInCity();
-            //    f.Cities = item.
-            //    f.NrOfPets = f.NrOfPets;
-            //    f.NrOfQuotes = f.NrOfQuotes;
 
-            //    FriendsList.Add(f);
-            //}
-
-            //PetList = await service.ReadPetsAsync(null, true, false, "", 0, 100);
-
-            //var friendInfo = info.Friends
-            //                    .Where(x => x.Country == country && x.City == city
-            //                    && x.City != null).ToList();
-            ////.GroupBy(x => x.City != null)
-
-            //var petInfo = info.Pets
-            //                    .Where(x => x.Country == country && x.City != null)
-            //                    .GroupBy(x => x.City != null).ToList();
-
-
-            //AddressList = await service.ReadAddressesAsync(usr, true, false, "", 0, 100);
-            //PetList = await service.ReadPetsAsync(usr, true, false, country, 0, 100);
-            //QuoteList = await service.ReadQuotesAsync(usr, true, false, " ", 0, 100);
-            //petpet = PetList.Where()
         }
 
         //TODO: Work on search and Pagination if there's time.

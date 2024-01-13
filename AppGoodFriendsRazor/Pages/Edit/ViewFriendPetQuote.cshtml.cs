@@ -7,10 +7,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppGoodFriendsRazor.Pages.Edit
 {
-    public class ViewAndEditModel : PageModel
+    public class ViewFriendPetQuoteModel : PageModel
     {
         IFriendsService service = null;
-        ILogger<ViewAndEditModel> logger = null;
+        ILogger<ViewFriendPetQuoteModel> logger = null;
         loginUserSessionDto usr = null;
 
         /* 
@@ -31,7 +31,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             if (Guid.TryParse(Request.Query["id"], out Guid id))
             {
                 //Read a friend 
-                var friend = await service.ReadFriendAsync(null, id, false);
+                var friend = await service.ReadFriendAsync(usr, id, false);
 
                 ViewFriendIM = new csViewFriendIM(friend);
                 PageHeader = "Edit detail of a friend";
@@ -48,15 +48,32 @@ namespace AppGoodFriendsRazor.Pages.Edit
             // ViewAndEditEverythingIMs = await service.ReadFriendAsync(usr, id, false).Select(e => new csViewAndEditEverythingIM(e)).ToList();
         }
 
-        //public async Task<IActionResult> OnPostAddFriend()
-        //{
-        //    ViewFriendIM.New
-        //}
+        public IActionResult OnPostEditPet(Guid petId)
+        {
+            int petIdx = ViewFriendIM.PetIM.FindIndex(a => a.PetId == petId);
+            string[] keys = { $"ViewFriendIM.PetIM[{petIdx}].editName",
+                            $"ViewFriendIM.PetIM[{petIdx}].editKind",
+                            $"ViewFriendIM.PetIM[{petIdx}].editMood"};
+
+            //Set the Album as Modified, it will later be updated in the database
+            var a = ViewFriendIM.PetIM.First(a => a.PetId == petId);
+            if (a.StatusIM != enStatusIM.Inserted)
+            {
+                a.StatusIM = enStatusIM.Modified;
+            }
+
+            //Implement the changes
+            a.Name = a.editName;
+            a.Kind = a.editKind;
+            a.Mood = a.editMood;
+
+            return Page();
+        }
 
         #endregion
 
         #region Constructor
-        public ViewAndEditModel(IFriendsService service, ILogger<ViewAndEditModel> logger)
+        public ViewFriendPetQuoteModel(IFriendsService service, ILogger<ViewFriendPetQuoteModel> logger)
         {
             this.service = service;
             this.logger = logger;
@@ -65,7 +82,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
         #region Input Model 
         public enum enStatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
-
 
         public class csViewFriendIM
         {
@@ -84,7 +100,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public DateTime? Birthday { get; set; }
             public csAddressIM AddressIM { get; set; }
 
-            //Added properties to edit in the list with undo
+            //Added properties to edit in the list
             [Required(ErrorMessage = "You must provide firstname")]
             public string editFirstname { get; set; }
 
@@ -94,14 +110,35 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public DateTime? editBirthday { get; set; }
 
             public List<csPetIM> PetIM { get; set; } = new List<csPetIM>();
-            //public List<csQuoteIM> QuoteIM { get; set; } = new List<csQuoteIM>();
+            public List<csQuoteIM> QuoteIM { get; set; } = new List<csQuoteIM>();
 
             #region constructors and model update 
+            //public csViewFriendIM() { }
             public csViewFriendIM()
             {
                 StatusIM = enStatusIM.Unchanged;
                 AddressIM = new csAddressIM();
+                PetIM = new List<csPetIM>();
+                QuoteIM = new List<csQuoteIM>();
             }
+
+            /*
+            public csViewFriendIM(IFriend model)
+            {
+                StatusIM = enStatusIM.Unchanged;
+                FriendId = model.FriendId;
+                Firstname = model.FirstName;
+                Lastname = model.LastName;
+                Email = model.Email;
+                Birthday = model.Birthday;
+
+                PetIM = model.Pets?.Select(p => new csPetIM(p)).ToList();
+                QuoteIM = model.Quotes?.Select(q => new csQuoteIM(q)).ToList();
+            }
+            */
+
+            public csPetIM NewPet { get; set; } = new csPetIM();
+            public csQuoteIM NewQuote { get; set; } = new csQuoteIM();
 
             //copy constructor
             public csViewFriendIM(csViewFriendIM original)
@@ -135,7 +172,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             }
 
             //InputModel => Model 
-            public IFriend UpdateModel(IFriend model)
+            public IFriend UpdateFriendModel(IFriend model)
             {
                 model.FriendId = FriendId;
                 model.FirstName = Firstname;
@@ -143,6 +180,9 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 model.Email = Email;
                 model.Birthday = Birthday;
                 model.Address = AddressIM.UpdateModel(model.Address);
+
+                model.Pets = PetIM.Select(p => p.UpdatePetModel(new csPet())).ToList();
+                model.Quotes = QuoteIM.Select(q => q.UpdateQuoteModel(new csQuote())).ToList();
                 return model;
             }
             #endregion
@@ -171,7 +211,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
             public override string ToString() => $"{StreetAddress}, {ZipCode} {City}, {Country}";
 
-            //Added properties to edit in the list with undo
+            //Added properties to edit in the list
             [Required(ErrorMessage = "You must provide streetaddress")]
             public string editStreetAddress { get; set; }
 
@@ -238,8 +278,125 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public enStatusIM StatusIM { get; set; }
             public Guid PetId { get; set; }
 
-            [Required(ErrorMessage = "You must enter a pet name")]
-            public string PetName { get; set; }
+            [Required(ErrorMessage = "The pet must have a name")]
+            public string Name { get; set; }
+
+            [Required(ErrorMessage = "You must choose a pet's kind")]
+            public enAnimalKind Kind { get; set; }
+            public enAnimalMood Mood { get; set; }  //optional
+
+            //Added properties to edit in the list
+            [Required(ErrorMessage = "The pet must have a name")]
+            public string editName { get; set; }
+
+            [Required(ErrorMessage = "You must choose a pet's kind")]
+            public enAnimalKind editKind { get; set; }
+
+            public enAnimalMood editMood { get; set; }
+
+
+            //Model => InputModel constructor
+            public csPetIM()
+            {
+                StatusIM = new enStatusIM();
+            }
+
+            //copy constructor
+            public csPetIM(csPetIM original)
+            {
+                StatusIM = original.StatusIM;
+                PetId = original.PetId;
+                Name = original.Name;
+                Kind = original.Kind;
+                Mood = original.Mood;
+
+                editName = original.editName;
+                editKind = original.editKind;
+                editMood = original.editMood;
+            }
+
+            //Model => InputModel constructor
+            public csPetIM(IPet original)
+            {
+                StatusIM = enStatusIM.Unchanged;
+                PetId = original.PetId;
+                Name = editName = original.Name;
+                Kind = editKind = original.Kind;
+                Mood = editMood = original.Mood;
+            }
+
+            //InputModel => Model 
+            public IPet UpdatePetModel(IPet model)
+            {
+                model.PetId = PetId;
+                model.Name = Name;
+                model.Kind = Kind;
+                model.Mood = Mood;
+
+                return model;
+            }
+        }
+        #endregion
+
+        #region csQuoteIM
+        public class csQuoteIM
+        {
+            public enStatusIM StatusIM { get; set; }
+            public Guid QuoteId { get; set; }
+
+            [Required(ErrorMessage = "You must provide a quote")]
+            public string Quote { get; set; }
+
+            [Required(ErrorMessage = "You must provide a name for the author, otherwise write Unknown")]
+            public string Author { get; set; }
+
+            //Added properties to edit in the list
+            [Required(ErrorMessage = "You must provide a quote")]
+            public string editQuote { get; set; }
+
+            [Required(ErrorMessage = "You must provide a name for the author, otherwise write Unknown")]
+            public string editAuthor { get; set; }
+
+
+            //Model => InputModel constructor
+            public csQuoteIM()
+            {
+                StatusIM = new enStatusIM();
+            }
+
+
+            //copy constructor
+            public csQuoteIM(csQuoteIM original)
+            {
+                StatusIM = original.StatusIM;
+                QuoteId = original.QuoteId;
+                Quote = original.Quote;
+                Author = original.Author;
+
+                editQuote = original.editQuote;
+                editAuthor = original.editAuthor;
+            }
+
+
+            //Model => InputModel constructor
+            public csQuoteIM(IQuote original)
+            {
+                StatusIM = enStatusIM.Unchanged;
+                QuoteId = original.QuoteId;
+                Quote = editQuote = original.Quote;
+                Author = editAuthor = original.Author;
+            }
+
+
+            //InputModel => Model 
+            public IQuote UpdateQuoteModel(IQuote model)
+            {
+                model.QuoteId = QuoteId;
+                model.Quote = Quote;
+                model.Author = Author;
+
+                return model;
+            }
 
         }
         #endregion
