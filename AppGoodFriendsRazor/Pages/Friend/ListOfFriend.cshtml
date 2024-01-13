@@ -45,11 +45,11 @@
             </div>
             <div class="col-md-2 themed-grid-col">
                 <div class="col-md-16">Born: @friend.Birthday</div>
-                <div class="col-md-16">Pets: @friend.Pets</div>
-                <div class="col-md-16">Quotes: @friend.Quotes</div>
+                <div class="col-md-16">Pets: @friend.Pets.Count</div>
+                <div class="col-md-16">Quotes: @friend.Quotes.Count</div>
             </div>
             <div class="col-md-2 themed-grid-col">
-                <a href="#view-friend" class="btn btn-primary btn-sm" type="button">View</a>
+                <a href="~/Editview-friend" class="btn btn-primary btn-sm" type="button">View</a>
                 <a href="#add-edit-friend" class="btn btn-secondary btn-sm" type="button">Edit</a>
                 <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
             </div>
@@ -57,77 +57,3 @@
     </div>
 
  </div>
-
-<!-- Page list-of-friends MARTIN -->
-<div class="container px-4 py-4" id="list-of-friends">
-    <h2 class="pb-2 border-bottom">List of friends</h2>
-
-    <p>
-        These are my friends. You can seach by name or address. You can also view or edit all the details. Sad but possible, if you have the right authorization you
-        could also remove a friened from my database. More fun is it to add a friend, which all my friends can do.
-    </p>
-    <div class="row mb-1 text-center">
-        <div class="col-md-8 ">
-            <form class="d-flex mt-3 mt-lg-0" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="row mb-2 text-center">
-        <div class="col-md-4 themed-grid-col">Name</div>
-        <div class="col-md-4 themed-grid-col">Address</div>
-        <div class="col-md-2 themed-grid-col">Info</div>
-        <div class="col-md-2 themed-grid-col">
-            <a href="#add-edit-friend" class="btn btn-success btn-sm" type="button">Add</a>
-        </div>
-    </div>
-    <div class="row mb-2 text-center">
-        <div class="col-md-4 themed-grid-col">
-            Tim Baggins
-            <div class="col-md-16">tim.baggins@icloud.com</div>
-        </div>
-        <div class="col-md-4 themed-grid-col">
-            Ringvagen 1
-            <div class="col-md-16">123 45 Stockholm</div>
-            <div class="col-md-16">Sweden</div>
-        </div>
-        <div class="col-md-2 themed-grid-col">
-            <div class="col-md-16">Born: 1983-03-25</div>
-            <div class="col-md-16">Pets: 5</div>
-            <div class="col-md-16">Quotes: 3</div>
-        </div>
-        <div class="col-md-2 themed-grid-col">
-            <a href="#view-friend" class="btn btn-primary btn-sm" type="button">View</a>
-            <a href="#add-edit-friend" class="btn btn-secondary btn-sm" type="button">Edit</a>
-            <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
-        </div>
-    </div>
-    <nav aria-label="Standard pagination example">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#list-of-friends" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">1</a></li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">2</a></li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">3</a></li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">4</a></li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">5</a></li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">6</a></li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">7</a></li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">8</a></li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">9</a></li>
-            <li class="page-item"><a class="page-link" href="#list-of-friends">10</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#list-of-friends" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-
-</div>
