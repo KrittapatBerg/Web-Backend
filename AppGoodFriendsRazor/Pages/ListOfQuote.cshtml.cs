@@ -19,10 +19,6 @@ namespace AppGoodFriendsRazor.Pages
         //[BindProperty]
         //public csFriendQuoteIM NewQuoteIM { get; set; } = new csFriendQuoteIM();
 
-
-
-
-
         #region HTTP Requests 
         public async Task<IActionResult> OnGetAsync()
         {

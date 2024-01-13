@@ -49,8 +49,8 @@
                 <div class="col-md-16">Quotes: @friend.Quotes.Count</div>
             </div>
             <div class="col-md-2 themed-grid-col">
-                <a href="~/Edit/ViewFriendPetQuote" class="btn btn-primary btn-sm" type="button">View</a>
-                <a href="~/Edit/AddEditFriend" class="btn btn-secondary btn-sm" type="button">Edit</a>
+                <a href="~/Edit/ViewFriendPetQuote?id=@friend.FriendId" class="btn btn-primary btn-sm" type="button">View</a>
+                <a href="~/Edit/AddEditFriend?id=@friend.FriendId" class="btn btn-secondary btn-sm" type="button">Edit</a>
                 <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
             </div>
         }

@@ -22,8 +22,7 @@
             </div>
             <form method="post" class="needs-validation" novalidate>
                 <div class="row mb-2 text-center">
-                    @* 
-
+                    
                     @if (Model.QuoteList is not null)
                     {
                         <!-- This is where selected item id will be stored -->
@@ -32,17 +31,17 @@
                         @foreach (var item in Model.QuoteList)
                         {
                             <div class="col-md-10 themed-grid-col">
-                                <a href="~/ViewGroup?id=@item.MusicGroupId">
+                                <a href="~/Edit/AddEditQuote?id=@item.QuoteId">
                                     @item
                                 </a>
                             </div>
                             <div class="col-md-2 themed-grid-col">
-                                <a href="~/EditGroup?id=@item.MusicGroupId" class="btn btn-secondary btn-sm m-1" type="button">Edit</a>
+                                <a href="~/Edit/AddEditQuote?id=@item.QuoteId" class="btn btn-secondary btn-sm m-1" type="button">Edit</a>
 
                                 <!-- Button to trigger modal confirmation with modal in the form tag -->
                                 <button type="button" class="btn btn-danger btn-sm m-1" data-bs-toggle="modal" data-bs-target="#delModal"
-                                        data-seido-modal-body="@item.Name is about to be deleted."
-                                        data-seido-selected-item-id="@item.MusicGroupId">
+                                        data-seido-modal-body="@item.Quote is about to be deleted."
+                                        data-seido-selected-item-id="@item.QuoteId">
                                     Del
                                 </button>
                             </div>
@@ -67,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                    *@
+                    
                 </div>
             </form>
         </div>

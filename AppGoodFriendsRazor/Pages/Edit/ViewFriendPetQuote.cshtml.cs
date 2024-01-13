@@ -31,7 +31,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             if (Guid.TryParse(Request.Query["id"], out Guid id))
             {
                 //Read a friend 
-                var friend = await service.ReadFriendAsync(usr, id, false);
+                var friend = await service.ReadFriendAsync(null, id, false);
 
                 ViewFriendIM = new csViewFriendIM(friend);
                 PageHeader = "Edit detail of a friend";
@@ -66,6 +66,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
         #region Input Model 
         public enum enStatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
 
+
         public class csViewFriendIM
         {
             //Status of InputModel
@@ -91,6 +92,9 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public string editLastname { get; set; }
             public string editEmail { get; set; }
             public DateTime? editBirthday { get; set; }
+
+            public List<csPetIM> PetIM { get; set; } = new List<csPetIM>();
+            //public List<csQuoteIM> QuoteIM { get; set; } = new List<csQuoteIM>();
 
             #region constructors and model update 
             public csViewFriendIM()
@@ -184,8 +188,59 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public csAddressIM()
             {
                 StatusIM = new enStatusIM();
+            }
+
+            //copy constructor
+            public csAddressIM(csAddressIM original)
+            {
+                StatusIM = original.StatusIM;
+                AddressId = original.AddressId;
+                StreetAddress = original.StreetAddress;
+                ZipCode = original.ZipCode;
+                City = original.City;
+                Country = original.Country;
+
+                editStreetAddress = original.editStreetAddress;
+                editZipcode = original.editZipcode;
+                editCity = original.editCity;
+                editCountry = original.editCountry;
 
             }
+
+            //Model => InputModel constructor
+            public csAddressIM(IAddress original)
+            {
+                StatusIM = enStatusIM.Unchanged;
+                AddressId = original.AddressId;
+                StreetAddress = editStreetAddress = original.StreetAddress;
+                ZipCode = editZipcode = original.ZipCode;
+                City = editCity = original.City;
+                Country = editCountry = original.Country;
+            }
+
+            //InputModel => Model 
+            public IAddress UpdateModel(IAddress model)
+            {
+                model.AddressId = AddressId;
+                model.StreetAddress = StreetAddress;
+                model.ZipCode = ZipCode;
+                model.City = City;
+                model.Country = Country;
+
+                return model;
+            }
+        }
+        #endregion
+
+        #region csPetIM
+        public class csPetIM
+        {
+            public enStatusIM StatusIM { get; set; }
+            public Guid PetId { get; set; }
+
+            [Required(ErrorMessage = "You must enter a pet name")]
+            public string PetName { get; set; }
+
         }
         #endregion
     }
