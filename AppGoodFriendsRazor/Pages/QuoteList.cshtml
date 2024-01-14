@@ -29,11 +29,20 @@
                                 @quote.Quote
                                 <p class="col-md-16  text-end"> <b> @quote.Author </b> </p>
                             </span>
+
+                            <div class="col-md-2 themed-grid-col">
+                                <a href="~/Edit/AddEditQuote?id=@quote.QuoteId" class="btn btn-secondary btn-sm" type="button">Edit</a>
+                            </div>
                         }
+                        <button class="btn btn-secondary btn-sm m-1" type="button"> Edit = this button is for collapsable  </button>
+                               @* data-bs-toggle="collapse" data-bs-target="#collapseEdit_@Model.QuotesIM[k].QuoteId"
+                                data-seido-selected-item-id="@Model.QuotesIM[k].QuoteId"> 
+                                Edit
+                                </button>
+                                *@
                     </div>
 
                 </div>
             </div>
         }
-    
 </div>

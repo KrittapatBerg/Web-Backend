@@ -11,6 +11,8 @@ namespace AppGoodFriendsRazor.Pages
         ILogger<QuoteListModel> logger;
         loginUserSessionDto usr;
 
+        //TODO: I want the same collapsable editable from AppStudies->InputModelListAdd 
+        //    : Make it Input Model 
         public List<IFriend> QuotesList { get; set; } = new List<IFriend>();
         public async Task OnGet()
         {
