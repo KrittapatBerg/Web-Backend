@@ -7,81 +7,61 @@
 @attribute [IgnoreAntiforgeryToken] 
 
 <div class="container px-4 py-4" id="add-edit-friend">
-    <h2 class="pb-2 border-bottom">Add or edit a friend's details</h2>
-    <p>Fill in the details below to add a friend. Once you have added your friend you can edit the details of your fiend such as favorite quotes and pets.</p>
-
+    <h2 class="pb-2 border-bottom">Edit details of a friend</h2>
+        <p>Below you find all the details of my friend. You can also modify the pets my friend has and the quotes he/she likes.</p>
     <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
         <div class="col-md-7 col-lg-8">
             <form class="needs-validation" novalidate>
                 <div class="row g-3">
+                    
+                    <!-- Hidden fields used to bind input model -->
+                    <input asp-for="EditFriendIM.FriendId" type="hidden" />
+                    <input asp-for="EditFriendIM.StatusIM" type="hidden" />
+
+                    
                     <div class="col-sm-6">
                         <label for="firstName" class="form-label">First name</label>
-                        <input type="text" class="form-control is-invalid" id="firstName" placeholder="" value="" required>
-                        <div class="invalid-feedback">
-                            Valid first name is required
-                        </div>
+                        <input type="text" class="form-control" id="firstName" asp-for="EditFriendIM.Firstname">
+                        <span asp-validation-for="EditFriendIM.Firstname" class="invalid-feedback"></span>
                     </div>
 
                     <div class="col-sm-6">
                         <label for="lastName" class="form-label">Last name</label>
-                        <input type="text" class="form-control is-invalid" id="lastName" placeholder="" value="" required>
-                        <div class="invalid-feedback">
-                            Valid last name is required
-                        </div>
+                        <input type="text" class="form-control" id="lastName" asp-for="EditFriendIM.Lastname">
+                        <span asp-validation-for="EditFriendIM.Lastname" class="invalid-feedback"></span>
                     </div>
 
                     <div class="col-sm-6">
-                        <label for="email" class="form-label">Email <span class="text-body-secondary">(Optional)</span></label>
-                        <input type="email" class="form-control" id="email" placeholder="you@example.com">
-                        <div class="invalid-feedback">
-                            Please enter a valid email address
-                        </div>
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" asp-for="EditFriendIM.Email">
                     </div>
                     <div class="col-sm-6">
-                        <label for="birthday" class="form-label">Birthday <span class="text-body-secondary">(Optional)</span></label>
-                        <input type="date" class="form-control" id="birthday" placeholder="2000-01-01">
-                        <div class="invalid-feedback">
-                            Please enter a valid birthday
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <label class="form-check-label" for="userHasAddress"></label>
-                        <input class="form-check-input" type="checkbox" value="" id="userHasAddress">
-                        I know the address
+                        <label for="birthday" class="form-label">Birthday</label>
+                        <input type="birthday" class="form-control" id="birthday" asp-for="EditFriendIM.Birthday">
                     </div>
 
                     <div class="row g-3 visible">
                         <div class="col-12">
                             <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control is-invalid" id="address" required>
-                            <div class="invalid-feedback">
-                                Please enter a street address
-                            </div>
+                            <input type="text" class="form-control" id="address" asp-for="EditFriendIM.AddressIM.StreetAddress">
+                            <span asp-validation-for="EditFriendIM.AddressIM.StreetAddress" class="invalid-feedback"></span>
                         </div>
 
                         <div class="col-md-3">
-                            <label for="zip" class="form-label">Zip</label>
-                            <input type="text" class="form-control is-invalid" id="zip" placeholder="" required>
-                            <div class="invalid-feedback">
-                                Please enter a zip code
-                            </div>
+                            <label for="zip" class="form-label">Zipcode</label>
+                            <input type="text" class="form-control" id="zipCode" asp-for="EditFriendIM.AddressIM.ZipCode">
+                            <span asp-validation-for="EditFriendIM.AddressIM.ZipCode" class="invalid-feedback"></span>
                         </div>
 
                         <div class="col-md-4">
                             <label for="city" class="form-label">City</label>
-                            <input type="text" class="form-control is-invalid" id="city" required>
-                            <div class="invalid-feedback">
-                                Please enter a city
-                            </div>
+                            <input type="text" class="form-control" id="city" asp-for="EditFriendIM.AddressIM.City">
+                            <span asp-validation-for="EditFriendIM.AddressIM.City" class="invalid-feedback"></span>
                         </div>
 
                         <div class="col-md-5">
                             <label for="country" class="form-label">Country</label>
-                            <input type="text" type="text" class="form-control is-invalid" id="country" required>
-                            <div class="invalid-feedback">
-                                Please enter a country
-                            </div>
+                            <input type="text" class="form-control" id="country" asp-for="EditFriendIM.AddressIM.Country">
                         </div>
                     </div>
                 </div>
@@ -90,4 +70,5 @@
             </form>
         </div>
     </div>
+   
 </div>
