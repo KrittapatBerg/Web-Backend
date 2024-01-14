@@ -11,3 +11,51 @@
     <p>Here are some pets of a friend. Click to add or edit pets on the list</p>
 
 </div>
+
+<div class="container px-4 py-4" id="add-edit-pet">
+    <h2 class="pb-2 border-bottom">Add or edit a pet's details</h2>
+    <p>Fill in the details below to add a pet.</p>
+    <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+        <div class="col-md-7 col-lg-8">
+            <form class="needs-validation" novalidate>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="petName" class="form-label">Name</label>
+                        <input type="text" class="form-control is-invalid" id="petName" placeholder="" value="" required>
+                        <div class="invalid-feedback">
+                            The pet must have a name
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="petType" class="form-label">Type of animal</label>
+                        <select class="form-select is-invalid" id="petType" required>
+                            <option value="">Choose...</option>
+                            <option>Fish</option>
+                            <option>Dog</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Select an animal type
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="petMood" class="form-label">Mood of the pet</label>
+                        <select class="form-select is-invalid" id="petMood" required>
+                            <option value="">Choose...</option>
+                            <option>Happy</option>
+                            <option>Sleepy</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Select the mood of the pet
+                        </div>
+                    </div>
+                </div>
+
+                <button class="w-100 btn btn-primary btn-lg my-4" type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+</div>

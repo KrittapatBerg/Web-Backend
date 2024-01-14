@@ -9,6 +9,7 @@
         <div class="col-sm-8 py-5 mx-auto">
             <h1 class="display-4 fw-bold">Welcome to</h1>
             <h2 class="display-5 fw-bold"> Good Friends Razor page by Quan </h2>
+            <p>with kind helps from Martin and my good friends, proudly delivered to you </p>
             <h5 class="fs-5"> Choose the menu above to browse through our good friends 😇 <br />
                 or simply click the button down here </h5>
             <p>
@@ -17,27 +18,7 @@
             <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
         </div>
 
-        @*<div>
-            <ul>
-                @foreach (var item in Model.FriendsByCountries)
-                {
-                    <li>
-                        @item.Countries  
-                        @item.Cities.Sum(a => a.NrFriends)
-                    </li>
-                }
-            </ul>
-        </div>
-
-        <div> 
-            <ul>
-                @foreach (var pet in Model.FriendPetByCities)
-                {
-                    <li>Nr of friends @pet.NrFriends</li>
-                    <li>Nr of pets @pet.NrPets</li>
-                }
-            </ul>
-        </div> *@
+      
 
         <h1>Friends and Pets by Country and City</h1>
 
@@ -59,33 +40,7 @@
             <h3>@friendPetByCity.City</h3>
             <p> @friendPetByCity.NrFriends friends</p>
             <p> and @friendPetByCity.NrPets pets </p>
-            @*
-
-            @if (friendPetByCity.Pets != null && friendPetByCity.Pets.Any())
-            {
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Pet Name</th>
-                            <!-- Add other columns as needed -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var pet in friendPetByCity.Pets)
-                        {
-                            <tr>
-                                <td>@pet.NrPets</td>
-                                <!-- Add other cells as needed -->
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <p>No pets for this city.</p>
-            }
-            *@
+         
         }
     </div>
 </div>

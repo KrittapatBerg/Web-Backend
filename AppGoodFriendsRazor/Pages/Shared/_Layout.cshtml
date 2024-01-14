@@ -19,45 +19,23 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" 
-                                    aria-expanded="false"> Home </a>
-                            <ul class="dropdown-menu">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                            </ul>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-opacity-25" asp-area="" asp-page="/FriendList">Full list of Friends</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                               aria-expanded="false"> See Friends </a>
-                            <ul class="dropdown-menu">
-                                <a class="nav-link text-dark" asp-area="" asp-page="~/Friend/FriendsByCountry">Friends by country</a> 
-                                <a class="nav-link text-dark" asp-area="" asp-page="~/Friend/FriendInCity">Friends in a country </a>
-                            </ul>
+                            <a class="nav-link text-light-emphasis" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-opacity-25" asp-area="" asp-page="~/Friend/ListOfFriend">List of friends</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/FriendList">Full list of Friends</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-opacity-25" asp-area="" asp-page="/ListOfQuote">List of Quotes</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="~/Edit/ViewFriendPetQuote">View detail of a friend </a>
+                            <a class="nav-link text-light" asp-area="" asp-page="~/Edit/AddEditQuote">Add & edit quotes</a>
                         </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Add & Edit </a>
-                            <ul class="dropdown-menu">
-                                <a class="nav-link text-dark" asp-area="" asp-page="~/Edit/AddEditFriend">Add & Edit details of a friend </a>
-                                <a class="nav-link text-dark" asp-area="" asp-page="~/Edit/AddEditPet">Add & edit pets</a>
-                                <a class="nav-link text-dark" asp-area="" asp-page="~/Edit/AddEditQuote">Add & edit quotes</a>
-                            </ul>
-                        </li>
+                      
                     </ul>
                 </div>
             </div>
