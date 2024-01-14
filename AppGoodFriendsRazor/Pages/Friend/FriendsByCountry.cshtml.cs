@@ -22,7 +22,7 @@ namespace AppGoodFriendsRazor.Pages.Friend
         }
         #endregion
 
-        public async Task<IActionResult> OnGetAsync(string country)
+        public async Task<IActionResult> OnGetAsync() //(string country)
         {
             //Friends = await service.ReadFriendsAsync(usr, true, false, "", 0, 100);
 
