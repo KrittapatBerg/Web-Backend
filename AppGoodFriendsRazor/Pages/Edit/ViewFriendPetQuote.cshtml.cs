@@ -13,63 +13,43 @@ namespace AppGoodFriendsRazor.Pages.Edit
         ILogger<ViewFriendPetQuoteModel> logger = null;
         loginUserSessionDto usr = null;
 
-        /* 
-         * maybe it doesn't have to be a list
-        [BindProperty]
-        public List<csViewAndEditIM> ViewAndEditIMs { get; set; }    
-        */
-
         [BindProperty]
         public csViewFriendIM ViewFriendIM { get; set; }
 
-        [BindProperty]
-        public string PageHeader { get; set; }
+        public csFriend ViewFriend { get; set; }
 
         #region HTTP request
         public async Task<IActionResult> OnGetAsync()
         {
             if (Guid.TryParse(Request.Query["id"], out Guid id))
             {
-                //Read a friend 
+                //Read a friend
                 var friend = await service.ReadFriendAsync(usr, id, false);
 
+                ViewFriend = new csFriend()
+                {
+
+                    FriendId = id,
+                    FirstName = friend.FirstName,
+                    LastName = friend.LastName,
+                    Email = friend.Email,
+                    Birthday = friend.Birthday,
+                    Address = friend.Address,
+                    Pets = friend.Pets,
+                    Quotes = friend.Quotes
+                };
+
                 ViewFriendIM = new csViewFriendIM(friend);
-                PageHeader = "Edit detail of a friend";
+
             }
             else
             {
                 //create an empty friend 
                 ViewFriendIM = new csViewFriendIM();
                 ViewFriendIM.StatusIM = enStatusIM.Inserted;
-                PageHeader = "Create a new friend";
-
             }
             return Page();
-            // ViewAndEditEverythingIMs = await service.ReadFriendAsync(usr, id, false).Select(e => new csViewAndEditEverythingIM(e)).ToList();
         }
-
-        public IActionResult OnPostEditPet(Guid petId)
-        {
-            int petIdx = ViewFriendIM.PetIM.FindIndex(a => a.PetId == petId);
-            string[] keys = { $"ViewFriendIM.PetIM[{petIdx}].editName",
-                            $"ViewFriendIM.PetIM[{petIdx}].editKind",
-                            $"ViewFriendIM.PetIM[{petIdx}].editMood"};
-
-            //Set the Album as Modified, it will later be updated in the database
-            var a = ViewFriendIM.PetIM.First(a => a.PetId == petId);
-            if (a.StatusIM != enStatusIM.Inserted)
-            {
-                a.StatusIM = enStatusIM.Modified;
-            }
-
-            //Implement the changes
-            a.Name = a.editName;
-            a.Kind = a.editKind;
-            a.Mood = a.editMood;
-
-            return Page();
-        }
-
         #endregion
 
         #region Constructor
@@ -82,6 +62,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
         #region Input Model 
         public enum enStatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
+
 
         public class csViewFriendIM
         {
@@ -109,7 +90,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public string editEmail { get; set; }
             public DateTime? editBirthday { get; set; }
 
-            public List<csPetIM> PetIM { get; set; } = new List<csPetIM>();
+            public List<csPetIM> Pets { get; set; } = new List<csPetIM>();
             public List<csQuoteIM> QuoteIM { get; set; } = new List<csQuoteIM>();
 
             #region constructors and model update 
@@ -118,7 +99,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             {
                 StatusIM = enStatusIM.Unchanged;
                 AddressIM = new csAddressIM();
-                PetIM = new List<csPetIM>();
+                Pets = new List<csPetIM>();
                 QuoteIM = new List<csQuoteIM>();
             }
 
@@ -181,7 +162,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 model.Birthday = Birthday;
                 model.Address = AddressIM.UpdateModel(model.Address);
 
-                model.Pets = PetIM.Select(p => p.UpdatePetModel(new csPet())).ToList();
+                model.Pets = Pets.Select(p => p.UpdatePetModel(new csPet())).ToList();
                 model.Quotes = QuoteIM.Select(q => q.UpdateQuoteModel(new csQuote())).ToList();
                 return model;
             }
