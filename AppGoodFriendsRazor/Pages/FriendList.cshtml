@@ -9,7 +9,7 @@
 <div class="container px-4 py-4" id="list-of-friends">
     <h2 class="pb-2 border-bottom">List of all friends</h2>
 
-    <h5>Below are some friends </h5>
+    <h5>Below are friends' details </h5>
         @foreach (var item in Model.FriendsList)
         {
             <div class="form-control">
@@ -17,26 +17,26 @@
                 <div class="row mb-2 text-secondary-emphasis">
 
                     <div class="col-md-10 themed-grid-col">
-                        <label for="name" class="form-label"> Name </label>
+                    <label for="name" class="form-label" style="font-weight: bold;"> Name </label>
                         <span class="form-control"> @item.FirstName  @item.LastName</span>
                     </div>
 
                     <div class="col-md-10 themed-grid-col">
-                        <label for="birthday" class="form-label">Born </label>
+                    <label for="birthday" class="form-label" style="font-weight: bold;">Born </label>
                         <span class="form-control"> @item.Birthday</span>
                     </div>
 
                     <div class="col-md-10 themed-grid-col">
-                        <label for="address" class="form-label">Address </label>
+                    <label for="address" class="form-label" style="font-weight: bold;">Address </label>
                         <span class="form-control"> @item.Address</span>
                     </div>
                     <div class="col-md-10 themed-grid-col">
-                        <label for="email" class="form-label">Email </label>
+                    <label for="email" class="form-label" style="font-weight: bold;">Email </label>
                         <span class="form-control"> @item.Email</span>
                     </div>
                     
                     <div class="col-md-10 themed-grid-col">
-                        <label for="pet" class="form-label">Pets </label>
+                    <label for="pet" class="form-label" style="font-weight: bold;">Pets </label>
                             @foreach (var pet in @item.Pets)
                             {
                                 <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind </span>
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="col-md-10 themed-grid-col">
-                        <label for="quote" class="form-label">Quotes </label>
+                    <label for="quote" class="form-label" style="font-weight: bold;">Quotes </label>
                             @foreach (var quote in @item.Quotes)
                             {
                                 <span class="form-control"> @quote.Quote 
@@ -57,6 +57,10 @@
         }
 
     <div class="col-md-2 themed-grid-col">
-        <a class="btn btn-primary" href="~/Friend/FriendsByCountry" role="button">See good friends by country </a>
+            <a class="btn btn-primary" href="~/Friend/FriendsByCountry" role="button">See good friends by country </a>
+    </div>
+
+    <div class="col-md-2 themed-grid-col">
+            <a class="btn btn-primary" href="~/Edit/AddEditFriend" role="button"> Add a new friend ? <br />Click me </a>
     </div>
 </div>

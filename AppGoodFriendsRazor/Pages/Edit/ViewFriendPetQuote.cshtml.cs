@@ -60,9 +60,9 @@ namespace AppGoodFriendsRazor.Pages.Edit
         }
         #endregion
 
-        #region Input Model 
+        #region Input Model   
         public enum enStatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
-
+        //YUP
 
         public class csViewFriendIM
         {
@@ -70,20 +70,20 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public enStatusIM StatusIM { get; set; }
 
             //properties from Model which is to be edited in the <form>
-            public Guid FriendId { get; init; } = Guid.NewGuid();
+            public Guid FriendId { get; set; } //init; } = Guid.NewGuid();
 
             [Required(ErrorMessage = "You must provide firstname")]
-            public string Firstname { get; set; }
+            public string FirstName { get; set; }
 
             [Required(ErrorMessage = "You must provide lastname")]
-            public string Lastname { get; set; }
+            public string LastName { get; set; }
             public string Email { get; set; }
             public DateTime? Birthday { get; set; }
             public csAddressIM AddressIM { get; set; }
 
             //Added properties to edit in the list
             [Required(ErrorMessage = "You must provide firstname")]
-            public string editFirstname { get; set; }
+            public string editFirstName { get; set; }
 
             [Required(ErrorMessage = "You must provide lastname")]
             public string editLastname { get; set; }
@@ -93,15 +93,19 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public List<csPetIM> Pets { get; set; } = new List<csPetIM>();
             public List<csQuoteIM> QuoteIM { get; set; } = new List<csQuoteIM>();
 
+            //YUP 
+
             #region constructors and model update 
             //public csViewFriendIM() { }
             public csViewFriendIM()
             {
                 StatusIM = enStatusIM.Unchanged;
                 AddressIM = new csAddressIM();
-                Pets = new List<csPetIM>();
-                QuoteIM = new List<csQuoteIM>();
+                //Pets = new List<csPetIM>();
+                //QuoteIM = new List<csQuoteIM>();
             }
+            //YUP
+
 
             /*
             public csViewFriendIM(IFriend model)
@@ -118,55 +122,69 @@ namespace AppGoodFriendsRazor.Pages.Edit
             }
             */
 
-            public csPetIM NewPet { get; set; } = new csPetIM();
-            public csQuoteIM NewQuote { get; set; } = new csQuoteIM();
+            //public csPetIM NewPet { get; set; } = new csPetIM();
+            //public csQuoteIM NewQuote { get; set; } = new csQuoteIM();
 
             //copy constructor
             public csViewFriendIM(csViewFriendIM original)
             {
                 StatusIM = original.StatusIM;
                 FriendId = original.FriendId;
-                Firstname = original.Firstname;
-                Lastname = original.Lastname;
+                FirstName = original.FirstName;
+                LastName = original.LastName;
                 Email = original.Email;
                 Birthday = original.Birthday;
                 AddressIM = original.AddressIM;
 
-                editFirstname = original.editFirstname;
+                editFirstName = original.editFirstName;
                 editLastname = original.editLastname;
                 editEmail = original.editEmail;
                 editBirthday = original.editBirthday;
 
-            }
+            }  //YUP
 
-            //Model => InputModel constructor
-            public csViewFriendIM(IFriend original)
-            {
-                StatusIM = enStatusIM.Unchanged;
-                FriendId = original.FriendId;
-                Firstname = editFirstname = original.FirstName;
-                Lastname = editLastname = original.LastName;
-                Email = editEmail = original.Email;
-                Birthday = editBirthday = original.Birthday;
-                AddressIM = new csAddressIM(original.Address);
+            ////Model => InputModel constructor
+            //public csViewFriendIM(IFriend original)
+            //{
+            //    StatusIM = enStatusIM.Unchanged;
+            //    FriendId = original.FriendId;
+            //    FirstName = editFirstName = original.FirstName;
+            //    Lastname = editLastname = original.LastName;
+            //    Email = editEmail = original.Email;
+            //    Birthday = editBirthday = original.Birthday;
+            //    AddressIM = new csAddressIM(original.Address);
 
-            }
+            //}
 
             //InputModel => Model 
-            public IFriend UpdateFriendModel(IFriend model)
+            public IFriend UpdateModel(IFriend model)
             {
                 model.FriendId = FriendId;
-                model.FirstName = Firstname;
-                model.LastName = Lastname;
+                model.FirstName = FirstName;
+                model.LastName = LastName;
                 model.Email = Email;
                 model.Birthday = Birthday;
                 model.Address = AddressIM.UpdateModel(model.Address);
 
-                model.Pets = Pets.Select(p => p.UpdatePetModel(new csPet())).ToList();
-                model.Quotes = QuoteIM.Select(q => q.UpdateQuoteModel(new csQuote())).ToList();
+                //model.Pets = Pets.Select(p => p.UpdatePetModel(new csPet())).ToList();
+                //model.Quotes = QuoteIM.Select(q => q.UpdateQuoteModel(new csQuote())).ToList();
                 return model;
-            }
+            } //YUP
             #endregion
+
+            public csViewFriendIM(IFriend model)
+            {
+                StatusIM = enStatusIM.Unchanged;
+                FriendId = model.FriendId;
+                FirstName = editFirstName = model.FirstName;
+                LastName = editLastname = model.LastName;
+                Email = editEmail = model.Email;
+                Birthday = editBirthday = model.Birthday;
+
+                AddressIM = new csAddressIM(model.Address);
+
+            }
+            //public newPet , newQuote
         }
         #endregion
 
@@ -206,10 +224,17 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public string editCountry { get; set; }
 
             //Model => InputModel constructor
-            public csAddressIM()
+            public csAddressIM(IAddress model)
             {
-                StatusIM = new enStatusIM();
+                StatusIM = enStatusIM.Unchanged;
+                AddressId = model.AddressId;
+                StreetAddress = editStreetAddress = model.StreetAddress;
+                ZipCode = editZipcode = model.ZipCode;
+                City = editCity = model.City;
+                Country = editCountry = model.Country;
             }
+
+            public csAddressIM() { }
 
             //copy constructor
             public csAddressIM(csAddressIM original)
@@ -229,15 +254,15 @@ namespace AppGoodFriendsRazor.Pages.Edit
             }
 
             //Model => InputModel constructor
-            public csAddressIM(IAddress original)
-            {
-                StatusIM = enStatusIM.Unchanged;
-                AddressId = original.AddressId;
-                StreetAddress = editStreetAddress = original.StreetAddress;
-                ZipCode = editZipcode = original.ZipCode;
-                City = editCity = original.City;
-                Country = editCountry = original.Country;
-            }
+            //public csAddressIM(csAddressIM original)
+            //{
+            //    StatusIM = enStatusIM.Unchanged;
+            //    AddressId = original.AddressId;
+            //    StreetAddress = editStreetAddress = original.StreetAddress;
+            //    ZipCode = editZipcode = original.ZipCode;
+            //    City = editCity = original.City;
+            //    Country = editCountry = original.Country;
+            //}
 
             //InputModel => Model 
             public IAddress UpdateModel(IAddress model)

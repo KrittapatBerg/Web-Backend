@@ -12,6 +12,7 @@ namespace AppGoodFriendsRazor.Pages
         loginUserSessionDto usr = null;
 
         public List<IFriend> FriendsList { get; set; } = new List<IFriend>();
+
         #region HTTP request
         public async Task OnGet()
         {
