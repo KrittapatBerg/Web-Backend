@@ -90,7 +90,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public string editEmail { get; set; }
             public DateTime? editBirthday { get; set; }
 
-            public List<csPetIM> Pets { get; set; } = new List<csPetIM>();
+            public List<csPetIM> PetIM { get; set; } = new List<csPetIM>();
             public List<csQuoteIM> QuoteIM { get; set; } = new List<csQuoteIM>();
 
             //YUP 
@@ -105,22 +105,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 //QuoteIM = new List<csQuoteIM>();
             }
             //YUP
-
-
-            /*
-            public csViewFriendIM(IFriend model)
-            {
-                StatusIM = enStatusIM.Unchanged;
-                FriendId = model.FriendId;
-                Firstname = model.FirstName;
-                Lastname = model.LastName;
-                Email = model.Email;
-                Birthday = model.Birthday;
-
-                PetIM = model.Pets?.Select(p => new csPetIM(p)).ToList();
-                QuoteIM = model.Quotes?.Select(q => new csQuoteIM(q)).ToList();
-            }
-            */
 
             //public csPetIM NewPet { get; set; } = new csPetIM();
             //public csQuoteIM NewQuote { get; set; } = new csQuoteIM();
@@ -164,7 +148,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 model.LastName = LastName;
                 model.Email = Email;
                 model.Birthday = Birthday;
-                model.Address = AddressIM.UpdateModel(model.Address);
+                model.Address = AddressIM.UpdateAddressModel(model.Address);
 
                 //model.Pets = Pets.Select(p => p.UpdatePetModel(new csPet())).ToList();
                 //model.Quotes = QuoteIM.Select(q => q.UpdateQuoteModel(new csQuote())).ToList();
@@ -183,8 +167,12 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
                 AddressIM = new csAddressIM(model.Address);
 
+                PetIM = model.Pets?.Select(p => new csPetIM(p)).ToList() ?? new List<csPetIM>();
+                QuoteIM = model.Quotes?.Select(o => new csQuoteIM(o)).ToList() ?? new List<csQuoteIM>();
             }
-            //public newPet , newQuote
+
+            public csPetIM NewPetIM { get; set; } = new csPetIM();
+            public csQuoteIM NewQuoteIM { get; set; } = new csQuoteIM();
         }
         #endregion
 
@@ -208,7 +196,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
             [Required(ErrorMessage = "You type provide country")]
             public string Country { get; set; }
 
-            public override string ToString() => $"{StreetAddress}, {ZipCode} {City}, {Country}";
 
             //Added properties to edit in the list
             [Required(ErrorMessage = "You must provide streetaddress")]
@@ -253,19 +240,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
             }
 
-            //Model => InputModel constructor
-            //public csAddressIM(csAddressIM original)
-            //{
-            //    StatusIM = enStatusIM.Unchanged;
-            //    AddressId = original.AddressId;
-            //    StreetAddress = editStreetAddress = original.StreetAddress;
-            //    ZipCode = editZipcode = original.ZipCode;
-            //    City = editCity = original.City;
-            //    Country = editCountry = original.Country;
-            //}
-
             //InputModel => Model 
-            public IAddress UpdateModel(IAddress model)
+            public IAddress UpdateAddressModel(IAddress model)
             {
                 model.AddressId = AddressId;
                 model.StreetAddress = StreetAddress;
@@ -289,6 +265,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
             [Required(ErrorMessage = "You must choose a pet's kind")]
             public enAnimalKind Kind { get; set; }
+
+            [Required(ErrorMessage = "You must choose a pet's mood")]
             public enAnimalMood Mood { get; set; }  //optional
 
             //Added properties to edit in the list
@@ -298,14 +276,12 @@ namespace AppGoodFriendsRazor.Pages.Edit
             [Required(ErrorMessage = "You must choose a pet's kind")]
             public enAnimalKind editKind { get; set; }
 
+            [Required(ErrorMessage = "You must choose a pet's mood")]
             public enAnimalMood editMood { get; set; }
 
 
             //Model => InputModel constructor
-            public csPetIM()
-            {
-                StatusIM = new enStatusIM();
-            }
+            public csPetIM() { }
 
             //copy constructor
             public csPetIM(csPetIM original)
@@ -321,7 +297,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 editMood = original.editMood;
             }
 
-            //Model => InputModel constructor
+            //Model => InputModel constructor..... do I need this block ? 
             public csPetIM(IPet original)
             {
                 StatusIM = enStatusIM.Unchanged;
@@ -385,17 +361,17 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
 
             //Model => InputModel constructor
-            public csQuoteIM(IQuote original)
+            public csQuoteIM(IQuote model)
             {
                 StatusIM = enStatusIM.Unchanged;
-                QuoteId = original.QuoteId;
-                Quote = editQuote = original.Quote;
-                Author = editAuthor = original.Author;
+                QuoteId = model.QuoteId;
+                Quote = editQuote = model.Quote;
+                Author = editAuthor = model.Author;
             }
 
 
             //InputModel => Model 
-            public IQuote UpdateQuoteModel(IQuote model)
+            public IQuote UpdateModel(IQuote model)
             {
                 model.QuoteId = QuoteId;
                 model.Quote = Quote;

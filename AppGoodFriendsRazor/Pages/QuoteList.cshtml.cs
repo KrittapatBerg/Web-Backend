@@ -28,5 +28,10 @@ namespace AppGoodFriendsRazor.Pages
             this.logger = logger;
         }
         #endregion
+
+        #region Input Model
+        public enum enStatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
+
+        #endregion
     }
 }

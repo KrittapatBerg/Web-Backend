@@ -22,31 +22,33 @@
         </div>
     </div>
 
-    <div class="row mb-2 text-center">
-        <div class="col-md-4 themed-grid-col">Name</div>
-        <div class="col-md-4 themed-grid-col">Address</div>
-        <div class="col-md-2 themed-grid-col">Info</div>
-        <div class="col-md-2 themed-grid-col">
-            <a href="~/Edit/AddEditFriend" class="btn btn-success btn-sm" type="button">Add</a>
-        </div>
+    <div class="row mb-2 text-center" >
+        <div class="col-md-4 themed-grid-col"><span class="form-control" style="font-weight: bold;">Name</span> </div>
+        <div class="col-md-4 themed-grid-col"><span class="form-control" style="font-weight: bold;"> Address </span></div>
+        <div class="col-md-2 themed-grid-col"><span class="form-control" style="font-weight: bold;"> Info </span></div>
+            <div class="col-md-2 themed-grid-col">
+                <a href="~/Edit/AddEditFriend" class="btn btn-success btn-sm" type="button">Add</a>
+            </div>
     </div>
-
+       
+   
     <div class="row mb-2 text-center">
         @foreach (var friend in Model.FriendsList)
         {
-            <div class="col-md-4 themed-grid-col">
-                @friend.FirstName @friend.LastName 
-                <div class="col-md-16">@friend.Email</div>
-            </div>
-            <div class="col-md-4 themed-grid-col">
-                @friend.Address.StreetAddress
-                <div class="col-md-16">@friend.Address.City</div>
-                <div class="col-md-16">@friend.Address.Country</div>
+             <div class="col-md-4 themed-grid-col"> <span class="form-control">
+                @friend.FirstName @friend.LastName     
+                <div class="col-md-16"> @friend.Email </div> </span>
+             </div>
+            <div class="col-md-4 themed-grid-col"> <span class="form-control"> 
+                @friend.Address.StreetAddress  @friend.Address.City
+                    <div class="col-md-16">@friend.Address.Country</div>
+                </span>
             </div>
             <div class="col-md-2 themed-grid-col">
-                <div class="col-md-16">Born: @friend.Birthday</div>
-                <div class="col-md-16">Pets: @friend.Pets.Count</div>
-                <div class="col-md-16">Quotes: @friend.Quotes.Count</div>
+                <span class="form-control">
+                    <div class="col-md-16">Born: @friend.Birthday</div>
+                    <div class="col-md-16"> @friend.Pets.Count pets & @friend.Quotes.Count quotes </div>
+                </span>
             </div>
             <div class="col-md-2 themed-grid-col">
                 <a href="~/Edit/ViewFriendPetQuote?id=@friend.FriendId" class="btn btn-primary btn-sm" type="button">View</a>
