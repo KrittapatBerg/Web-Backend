@@ -10,7 +10,8 @@
     <h2 class="pb-2 border-bottom">List of all quotes</h2>
 
     <h5>Below are friends' favorite quote </h5>
-        @foreach (var info in Model.QuotesList)
+@* 
+        @foreach (var info in Model.QuotesIM)
         {
             <div class="form-control">
 
@@ -20,7 +21,6 @@
                     <label for="name" class="form-label" style="font-weight: bold;"> Name </label>
                         <span class="form-control"> @info.FirstName  @info.LastName</span>
                     </div>
-
                     <div class="col-md-10 themed-grid-col">
                     <label for="quote" class="form-label" style="font-weight: bold;"> Quotes </label>
                         @foreach (var quote in info.Quotes)
@@ -39,10 +39,13 @@
                                 data-seido-selected-item-id="@Model.QuotesIM[k].QuoteId"> 
                                 Edit
                                 </button>
-                                *@
-                    </div>
+                                
+            </div> 
 
                 </div>
             </div>
         }
+        *@
+
+
 </div>

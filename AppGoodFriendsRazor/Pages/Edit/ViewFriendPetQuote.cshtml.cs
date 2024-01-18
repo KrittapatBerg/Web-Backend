@@ -1,3 +1,4 @@
+using AppStudies.SeidoHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Models;
@@ -14,9 +15,13 @@ namespace AppGoodFriendsRazor.Pages.Edit
         loginUserSessionDto usr = null;
 
         [BindProperty]
-        public csViewFriendIM ViewFriendIM { get; set; }
+        public csViewFriendIM FriendInput { get; set; }
 
-        public csFriend ViewFriend { get; set; }
+        // public csFriend ViewFriend { get; set; }
+
+        //For Validation
+        public reModelValidationResult ValidationResult { get; set; } = new reModelValidationResult(false, null, null);
+
 
         #region HTTP request
         public async Task<IActionResult> OnGetAsync()
@@ -26,30 +31,169 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 //Read a friend
                 var friend = await service.ReadFriendAsync(usr, id, false);
 
-                ViewFriend = new csFriend()
-                {
+                //ViewFriend = new csFriend()
+                //{
 
-                    FriendId = id,
-                    FirstName = friend.FirstName,
-                    LastName = friend.LastName,
-                    Email = friend.Email,
-                    Birthday = friend.Birthday,
-                    Address = friend.Address,
-                    Pets = friend.Pets,
-                    Quotes = friend.Quotes
-                };
+                //    FriendId = id,
+                //    FirstName = friend.FirstName,
+                //    LastName = friend.LastName,
+                //    Email = friend.Email,
+                //    Birthday = friend.Birthday,
+                //    Address = friend.Address,
+                //    Pets = friend.Pets,
+                //    Quotes = friend.Quotes
+                //};
 
-                ViewFriendIM = new csViewFriendIM(friend);
+                FriendInput = new csViewFriendIM(friend);
 
             }
             else
             {
                 //create an empty friend 
-                ViewFriendIM = new csViewFriendIM();
-                ViewFriendIM.StatusIM = enStatusIM.Inserted;
+                FriendInput = new csViewFriendIM();
+                FriendInput.StatusIM = enStatusIM.Inserted;
             }
             return Page();
         }
+
+
+        public async Task<IActionResult> OnPostSave()
+        {
+            string[] keys = { "FriendInput.FirstName",
+                              "FriendInput.LastName",
+                              "FriendInput.Email"};
+
+            if (!ModelState.IsValidPartially(out reModelValidationResult validationResult, keys))
+            {
+                ValidationResult = validationResult;
+                return Page();
+            }
+
+            //First, are we creating a new Friend or editing another
+            if (FriendInput.StatusIM == enStatusIM.Inserted)
+            {
+                var fDto = new csFriendCUdto();
+
+                //create the Friend in the database
+                fDto.FirstName = FriendInput.FirstName;
+                fDto.FirstName = FriendInput.LastName;
+                fDto.Email = FriendInput.Email;
+
+                // use AddressId from FriendInput.Address
+                fDto.AddressId = FriendInput.Address.AddressId;
+
+
+                var newF = await service.CreateFriendAsync(usr, fDto);
+                //get the newly created FriendId
+                FriendInput.FriendId = newF.FriendId;
+
+            }
+            // använd AddressId från FriendInput.Address
+            var addressDto = new csAddressCUdto
+            {
+                AddressId = FriendInput.Address.AddressId,
+                StreetAddress = FriendInput.Address.StreetAddress,
+                ZipCode = FriendInput.Address.ZipCode,
+                City = FriendInput.Address.City,
+                Country = FriendInput.Address.Country
+            };
+
+
+            //Do all updates for Pets
+            IFriend f = await SavePets();
+
+            // Do all updates for Quotes
+            //f = await SaveQuotes();
+
+            //Finally, update the friend itself
+            f.FirstName = FriendInput.FirstName;
+            f.LastName = FriendInput.LastName;
+            f.Email = FriendInput.Email;
+
+
+            // använd AddressId från FriendInput.Address
+            var address = new csAddress
+            {
+                AddressId = FriendInput.Address.AddressId,
+                StreetAddress = FriendInput.Address.StreetAddress,
+                ZipCode = FriendInput.Address.ZipCode,
+                City = FriendInput.Address.City,
+                Country = FriendInput.Address.Country
+            };
+
+            // Uppdatera befintlig adress
+            var updatedAddress = await service.UpdateAddressAsync(usr, addressDto);
+            f.Address = updatedAddress;
+
+
+            var csFriendInstance = await service.UpdateFriendAsync(usr, new csFriendCUdto(f));
+
+            if (csFriendInstance == null)
+            {
+                // Handle the case where UpdateFriendAsync does not return a csFriend
+                throw new InvalidOperationException("UpdateFriendAsync did not return a csFriend instance.");
+            }
+            f = csFriendInstance;
+
+            if (FriendInput.StatusIM == enStatusIM.Inserted)
+            {
+                return Redirect($"~/Friend/ListOfFriend");
+            }
+
+            return Redirect($"~/Edit/ViewFriendPetQuote?id={FriendInput.FriendId}");
+        }
+
+        private async Task<IFriend> SavePets()
+        {
+            //Check if there are deleted Pets, if so simply remove them
+            var deletedPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Deleted));
+            foreach (var item in deletedPets)
+            {
+                //Remove from the database
+                await service.DeletePetAsync(usr, item.PetId);
+            }
+
+            //Check if there are any new pets added, if so create them in the database
+            var newPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Inserted));
+            var pf = await service.ReadFriendAsync(usr, FriendInput.FriendId, false);
+            var dtopF = new csFriendCUdto(pf);
+            foreach (var item in newPets)
+            {
+                //Create the corresposning model and CUdto objects
+                var model = item.UpdateModel(new csPet());
+                var cuDto = new csPetCUdto(model) { FriendId = FriendInput.FriendId };
+
+                //Set the relationships of a newly created item and write to database
+                cuDto.FriendId = FriendInput.FriendId;
+                model = await service.CreatePetAsync(usr, cuDto);
+
+                dtopF.PetsId.Add(model.PetId);
+
+            }
+
+            //To update modified and deleted pets, lets first read the original
+            //Note that now the deleted pets will be removed and created pets will be nicely included
+            var f = await service.UpdateFriendAsync(usr, dtopF);
+
+
+            //Check if there are any modified pets , if so update them in the database
+            var modifiedPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Modified));
+            foreach (var item in modifiedPets)
+            {
+                var model = f.Pets.First(a => a.PetId == item.PetId);
+
+                //Update the model from the InputModel
+                model = item.UpdateModel(model);
+
+                //Updatet the model in the database
+                model = await service.UpdatePetAsync(usr, new csPetCUdto(model) { FriendId = FriendInput.FriendId });
+            }
+
+            f = await service.ReadFriendAsync(usr, FriendInput.FriendId, false);
+
+            return f;
+        }
+
         #endregion
 
         #region Constructor
@@ -60,56 +204,56 @@ namespace AppGoodFriendsRazor.Pages.Edit
         }
         #endregion
 
-        #region Input Model   
+        #region Input Model
+        //InputModel (IM) is locally declared classes that contains ONLY the properties of the Model
+        //that are bound to the <form> tag
+        //EVERY property must be bound to an <input> tag in the <form>
+        //These classes are in center of ModelBinding and Validation
         public enum enStatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
-        //YUP
-
         public class csViewFriendIM
         {
-            //Status of InputModel
             public enStatusIM StatusIM { get; set; }
 
-            //properties from Model which is to be edited in the <form>
-            public Guid FriendId { get; set; } //init; } = Guid.NewGuid();
+            public Guid FriendId { get; set; }
 
-            [Required(ErrorMessage = "You must provide firstname")]
+            [Required(ErrorMessage = "You must provide a first name")]
             public string FirstName { get; set; }
 
-            [Required(ErrorMessage = "You must provide lastname")]
+            [Required(ErrorMessage = "You must provide a last name")]
             public string LastName { get; set; }
-            public string Email { get; set; }
-            public DateTime? Birthday { get; set; }
-            public csAddressIM AddressIM { get; set; }
 
-            //Added properties to edit in the list
-            [Required(ErrorMessage = "You must provide firstname")]
+            [Required(ErrorMessage = "You must provide a Email")]
+            public string Email { get; set; }
+
+            //This is because I want to confirm modifications in PostEditAlbum
+            [Required(ErrorMessage = "You must provide a first name")]
             public string editFirstName { get; set; }
 
-            [Required(ErrorMessage = "You must provide lastname")]
-            public string editLastname { get; set; }
+            [Required(ErrorMessage = "You must provide a last name")]
+            public string editLastName { get; set; }
+
+            [Required(ErrorMessage = "You must provide a Email")]
             public string editEmail { get; set; }
-            public DateTime? editBirthday { get; set; }
 
-            public List<csPetIM> PetIM { get; set; } = new List<csPetIM>();
-            public List<csQuoteIM> QuoteIM { get; set; } = new List<csQuoteIM>();
+            public csAddressIM Address { get; set; }
 
-            //YUP 
+            public List<csPetIM> Pets { get; set; } = new List<csPetIM>();
+            public List<csQuoteIM> Quotes { get; set; } = new List<csQuoteIM>();
+            public IFriend UpdateModel(IFriend model)
+            {
+                model.FriendId = this.FriendId;
+                model.FirstName = this.FirstName;
+                model.LastName = this.LastName;
+                model.Email = this.Email;
+                model.Address = Address.UpdateModel(model.Address);
+                return model;
+            }
 
-            #region constructors and model update 
-            //public csViewFriendIM() { }
             public csViewFriendIM()
             {
                 StatusIM = enStatusIM.Unchanged;
-                AddressIM = new csAddressIM();
-                //Pets = new List<csPetIM>();
-                //QuoteIM = new List<csQuoteIM>();
+                Address = new csAddressIM();
             }
-            //YUP
-
-            //public csPetIM NewPet { get; set; } = new csPetIM();
-            //public csQuoteIM NewQuote { get; set; } = new csQuoteIM();
-
-            //copy constructor
             public csViewFriendIM(csViewFriendIM original)
             {
                 StatusIM = original.StatusIM;
@@ -117,113 +261,80 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 FirstName = original.FirstName;
                 LastName = original.LastName;
                 Email = original.Email;
-                Birthday = original.Birthday;
-                AddressIM = original.AddressIM;
 
                 editFirstName = original.editFirstName;
-                editLastname = original.editLastname;
+                editLastName = original.editLastName;
                 editEmail = original.editEmail;
-                editBirthday = original.editBirthday;
 
-            }  //YUP
 
-            ////Model => InputModel constructor
-            //public csViewFriendIM(IFriend original)
-            //{
-            //    StatusIM = enStatusIM.Unchanged;
-            //    FriendId = original.FriendId;
-            //    FirstName = editFirstName = original.FirstName;
-            //    Lastname = editLastname = original.LastName;
-            //    Email = editEmail = original.Email;
-            //    Birthday = editBirthday = original.Birthday;
-            //    AddressIM = new csAddressIM(original.Address);
-
-            //}
-
-            //InputModel => Model 
-            public IFriend UpdateModel(IFriend model)
-            {
-                model.FriendId = FriendId;
-                model.FirstName = FirstName;
-                model.LastName = LastName;
-                model.Email = Email;
-                model.Birthday = Birthday;
-                model.Address = AddressIM.UpdateAddressModel(model.Address);
-
-                //model.Pets = Pets.Select(p => p.UpdatePetModel(new csPet())).ToList();
-                //model.Quotes = QuoteIM.Select(q => q.UpdateQuoteModel(new csQuote())).ToList();
-                return model;
-            } //YUP
-            #endregion
-
+                Address = original.Address;
+            }
             public csViewFriendIM(IFriend model)
             {
                 StatusIM = enStatusIM.Unchanged;
                 FriendId = model.FriendId;
                 FirstName = editFirstName = model.FirstName;
-                LastName = editLastname = model.LastName;
+                LastName = editLastName = model.LastName;
                 Email = editEmail = model.Email;
-                Birthday = editBirthday = model.Birthday;
 
-                AddressIM = new csAddressIM(model.Address);
+                Address = new csAddressIM(model.Address);
 
-                PetIM = model.Pets?.Select(p => new csPetIM(p)).ToList() ?? new List<csPetIM>();
-                QuoteIM = model.Quotes?.Select(o => new csQuoteIM(o)).ToList() ?? new List<csQuoteIM>();
+                Pets = model.Pets?.Select(m => new csPetIM(m)).ToList() ?? new List<csPetIM>();
+                Quotes = model.Quotes?.Select(m => new csQuoteIM(m)).ToList() ?? new List<csQuoteIM>();
             }
 
-            public csPetIM NewPetIM { get; set; } = new csPetIM();
-            public csQuoteIM NewQuoteIM { get; set; } = new csQuoteIM();
-        }
-        #endregion
+            public csPetIM NewPet { get; set; } = new csPetIM();
 
-        #region csAddressIM
+            public csQuoteIM NewQuote { get; set; } = new csQuoteIM();
+        }
+
         public class csAddressIM
         {
             public enStatusIM StatusIM { get; set; }
 
-            //properties from Model which is to be edited in the <form>
-            public Guid AddressId { get; set; } = Guid.NewGuid();
+            public Guid AddressId { get; set; }
 
-            [Required(ErrorMessage = "You must provide streetaddress")]
+            [Required(ErrorMessage = "You must enter an StreetAddress")]
             public string StreetAddress { get; set; }
 
-            [Required(ErrorMessage = "You must provide zipcode")]
+            [Required(ErrorMessage = "You must enter an ZipCode")]
             public int ZipCode { get; set; }
 
-            [Required(ErrorMessage = "You type provide city")]
+
+            [Required(ErrorMessage = "You must enter an City")]
             public string City { get; set; }
 
-            [Required(ErrorMessage = "You type provide country")]
+
+            [Required(ErrorMessage = "You must enter an Country")]
             public string Country { get; set; }
 
 
-            //Added properties to edit in the list
-            [Required(ErrorMessage = "You must provide streetaddress")]
+            [Required(ErrorMessage = "You must enter an StreetAddress")]
             public string editStreetAddress { get; set; }
 
-            [Required(ErrorMessage = "You must provide zipcode")]
-            public int editZipcode { get; set; }
 
-            [Required(ErrorMessage = "You type provide city")]
+            [Required(ErrorMessage = "You must enter an ZipCode")]
+            public int editZipCode { get; set; }
+
+            [Required(ErrorMessage = "You must enter an City")]
             public string editCity { get; set; }
 
-            [Required(ErrorMessage = "You type provide country")]
+            [Required(ErrorMessage = "You must enter an Country")]
             public string editCountry { get; set; }
 
-            //Model => InputModel constructor
-            public csAddressIM(IAddress model)
+
+            public IAddress UpdateModel(IAddress model)
             {
-                StatusIM = enStatusIM.Unchanged;
-                AddressId = model.AddressId;
-                StreetAddress = editStreetAddress = model.StreetAddress;
-                ZipCode = editZipcode = model.ZipCode;
-                City = editCity = model.City;
-                Country = editCountry = model.Country;
+                model.AddressId = this.AddressId;
+                model.StreetAddress = this.StreetAddress;
+                model.ZipCode = this.ZipCode;
+                model.City = this.City;
+                model.Country = this.Country;
+
+                return model;
             }
 
             public csAddressIM() { }
-
-            //copy constructor
             public csAddressIM(csAddressIM original)
             {
                 StatusIM = original.StatusIM;
@@ -234,120 +345,112 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 Country = original.Country;
 
                 editStreetAddress = original.editStreetAddress;
-                editZipcode = original.editZipcode;
+                editZipCode = original.editZipCode;
                 editCity = original.editCity;
                 editCountry = original.editCountry;
 
             }
-
-            //InputModel => Model 
-            public IAddress UpdateAddressModel(IAddress model)
+            public csAddressIM(IAddress model)
             {
-                model.AddressId = AddressId;
-                model.StreetAddress = StreetAddress;
-                model.ZipCode = ZipCode;
-                model.City = City;
-                model.Country = Country;
+                StatusIM = enStatusIM.Unchanged;
+                AddressId = model.AddressId;
+                StreetAddress = editStreetAddress = model.StreetAddress;
+                ZipCode = editZipCode = model.ZipCode;
+                City = editCity = model.City;
+                StreetAddress = editStreetAddress = model.StreetAddress;
+                Country = editStreetAddress = model.Country;
 
-                return model;
             }
         }
-        #endregion
 
-        #region csPetIM
         public class csPetIM
         {
             public enStatusIM StatusIM { get; set; }
+
             public Guid PetId { get; set; }
 
-            [Required(ErrorMessage = "The pet must have a name")]
-            public string Name { get; set; }
-
-            [Required(ErrorMessage = "You must choose a pet's kind")]
+            [Required(ErrorMessage = "You must enter an Animal Kind")]
             public enAnimalKind Kind { get; set; }
 
-            [Required(ErrorMessage = "You must choose a pet's mood")]
-            public enAnimalMood Mood { get; set; }  //optional
+            [Required(ErrorMessage = "You must enter an Animal Mood")]
+            public enAnimalMood Mood { get; set; }
 
-            //Added properties to edit in the list
-            [Required(ErrorMessage = "The pet must have a name")]
+
+            [Required(ErrorMessage = "You must enter an Name")]
+            public string Name { get; set; }
+
+            [Required(ErrorMessage = "You must select a pet Kind")]
+            public enAnimalKind? editKind { get; set; }
+
+            [Required(ErrorMessage = "You must enter a pet Mood")]
+            public enAnimalMood? editMood { get; set; }
+
+            [Required(ErrorMessage = "You must enter an Name")]
             public string editName { get; set; }
 
-            [Required(ErrorMessage = "You must choose a pet's kind")]
-            public enAnimalKind editKind { get; set; }
 
-            [Required(ErrorMessage = "You must choose a pet's mood")]
-            public enAnimalMood editMood { get; set; }
+            public IPet UpdateModel(IPet model)
+            {
+                model.PetId = this.PetId;
+                model.Kind = (Models.enAnimalKind)this.Kind;
+                model.Mood = (Models.enAnimalMood)this.Mood;
+                model.Name = this.Name;
 
+                return model;
+            }
 
-            //Model => InputModel constructor
             public csPetIM() { }
-
-            //copy constructor
             public csPetIM(csPetIM original)
             {
                 StatusIM = original.StatusIM;
                 PetId = original.PetId;
                 Name = original.Name;
-                Kind = original.Kind;
-                Mood = original.Mood;
 
                 editName = original.editName;
-                editKind = original.editKind;
-                editMood = original.editMood;
-            }
 
-            //Model => InputModel constructor..... do I need this block ? 
-            public csPetIM(IPet original)
+            }
+            public csPetIM(IPet model)
             {
                 StatusIM = enStatusIM.Unchanged;
-                PetId = original.PetId;
-                Name = editName = original.Name;
-                Kind = editKind = original.Kind;
-                Mood = editMood = original.Mood;
-            }
+                PetId = model.PetId;
+                Kind = (enAnimalKind)model.Kind;
+                Mood = (enAnimalMood)model.Mood;
+                Name = editName = model.Name;
 
-            //InputModel => Model 
-            public IPet UpdatePetModel(IPet model)
-            {
-                model.PetId = PetId;
-                model.Name = Name;
-                model.Kind = Kind;
-                model.Mood = Mood;
-
-                return model;
             }
         }
-        #endregion
 
-        #region csQuoteIM
         public class csQuoteIM
         {
             public enStatusIM StatusIM { get; set; }
+
             public Guid QuoteId { get; set; }
 
-            [Required(ErrorMessage = "You must provide a quote")]
+            [Required(ErrorMessage = "You must enter an Quote")]
             public string Quote { get; set; }
 
-            [Required(ErrorMessage = "You must provide a name for the author, otherwise write Unknown")]
+            [Required(ErrorMessage = "You must enter an Author")]
             public string Author { get; set; }
 
-            //Added properties to edit in the list
-            [Required(ErrorMessage = "You must provide a quote")]
+
+
+            [Required(ErrorMessage = "You must enter an Quote")]
             public string editQuote { get; set; }
 
-            [Required(ErrorMessage = "You must provide a name for the author, otherwise write Unknown")]
+            [Required(ErrorMessage = "You must enter an Author")]
             public string editAuthor { get; set; }
 
 
-            //Model => InputModel constructor
-            public csQuoteIM()
+            public IQuote UpdateModel(IQuote model)
             {
-                StatusIM = new enStatusIM();
+                model.QuoteId = this.QuoteId;
+                model.Quote = this.Quote;
+                model.Author = this.Author;
+
+                return model;
             }
 
-
-            //copy constructor
+            public csQuoteIM() { }
             public csQuoteIM(csQuoteIM original)
             {
                 StatusIM = original.StatusIM;
@@ -357,10 +460,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
                 editQuote = original.editQuote;
                 editAuthor = original.editAuthor;
+
             }
-
-
-            //Model => InputModel constructor
             public csQuoteIM(IQuote model)
             {
                 StatusIM = enStatusIM.Unchanged;
@@ -368,19 +469,10 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 Quote = editQuote = model.Quote;
                 Author = editAuthor = model.Author;
             }
-
-
-            //InputModel => Model 
-            public IQuote UpdateModel(IQuote model)
-            {
-                model.QuoteId = QuoteId;
-                model.Quote = Quote;
-                model.Author = Author;
-
-                return model;
-            }
-
         }
+
         #endregion
+
     }
+
 }

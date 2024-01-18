@@ -13,35 +13,9 @@ namespace AppGoodFriendsRazor.Pages.Friend
         loginUserSessionDto usr = null;
 
         public List<IFriend> FriendsList { get; set; } = new List<IFriend>();
-        public List<IAddress> AddressList { get; set; } = new List<IAddress>();
 
-        //public List<csFriendListInCity> ListOfFriends { get; set; }
-        //public List<csFriendListInCity> ListNrQuotes { get; set; }
-        //public List<IAddress> AddressList { get; set; }
-        //public List<IPet> PetList { get; set; }
-        //public List<IQuote> QuoteList { get; set; }
-        //public List<csFriendListInCity> QuoteList { get; set; }
-        //public class csFriendListInCity
-        //{
-        //    public string Cities { get; set; }
-        //    public int NrOfQuotes { get; set; }
-        //    public int NrOfPets { get; set; }
-
-        //}
-        //public string Country { get; set; }
-        //public string City { get; set; }
-
-        public async Task<IActionResult> OnGetAsync() //string country, string city
+        public async Task<IActionResult> OnGetAsync()
         {
-            //Country = country;
-            //City = city;
-
-            //var info = await service.InfoAsync;
-            //var friendInfo = info.Friends;
-            //var petInfo = info.Pets;
-
-            //var friendInfo = info.Friends.Where(x => x.City == city && x.City != null).ToList();
-            //var petInfo = info.Pets.Where(x => x.City == city && x.City != null).ToList();
 
             var idList = Request.Query["idList"].ToString();
 
