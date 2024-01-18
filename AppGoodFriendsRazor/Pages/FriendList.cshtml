@@ -23,7 +23,7 @@
 
                     <div class="col-md-10 themed-grid-col">
                     <label for="birthday" class="form-label" style="font-weight: bold;">Born </label>
-                        <span class="form-control"> @item.Birthday</span>
+                    <span class="form-control"> @(item.Birthday.HasValue ? item.Birthday.Value.ToString("yyyy-MM-dd") : "N/A")</span>
                     </div>
 
                     <div class="col-md-10 themed-grid-col">

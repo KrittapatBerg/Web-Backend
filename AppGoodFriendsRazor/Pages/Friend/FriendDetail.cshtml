@@ -14,88 +14,102 @@
 
 <div class="container px-4 py-4" id="view-friend">
     <h2 class="pb-2 border-bottom">View details of a friend</h2>
-    <p>Below you find all the details of @Model.FriendDetail </p>
-
-    <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
-        <div class="col-md-7 col-lg-8">
-            <form class="needs-validation" novalidate>
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <label for="firstName" class="form-label">First name</label>
-                        <input type="text" class="form-control" id="firstName" value="Tim" required>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <label for="lastName" class="form-label">Last name</label>
-                        <input type="text" class="form-control" id="lastName" value="Baggins" required>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" value="tim.baggins@icloud.com">
-                    </div>
-                    <div class="col-sm-6">
-                        <label for="birthday" class="form-label">Birthday</label>
-                        <input type="birthday" class="form-control" id="birthday" value="1983-03-25">
-                    </div>
-
-                    <div class="row g-3 visible">
-                        <div class="col-12">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" value="Ringvagen 1" required>
+    @foreach (var friend in Model.FriendDetail)
+    {
+        <h6>Below you find all the details of <b>@friend.FirstName </b> </h6>
+        
+        <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+            <div class="col-md-7 col-lg-8">
+                <form class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">First name</label>
+                            <input type="text" class="form-control" id="firstName" value="@friend.FirstName" required>
                         </div>
 
-                        <div class="col-md-3">
-                            <label for="zip" class="form-label">Zip</label>
-                            <input type="text" class="form-control" id="zip" value="123 45" required>
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Last name</label>
+                            <input type="text" class="form-control" id="lastName" value="@friend.LastName" required>
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="city" class="form-label">City</label>
-                            <input type="text" class="form-control" id="city" value="Stockholm" required>
+                        <div class="col-sm-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="email" value="@friend.Email">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="birthday" class="form-label">Birthday</label>
+                            <input type="text" class="form-control" id="birthday"
+                                   value="@(friend.Birthday.HasValue ? friend.Birthday.Value.ToString("yyyy-MM-dd") : "N/A")">
                         </div>
 
-                        <div class="col-md-5">
-                            <label for="country" class="form-label">Country</label>
-                            <input type="text" class="form-control" id="country" value="Sweden" required>
+                        <div class="row g-3 visible">
+                            <div class="col-12">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" value="@friend.Address.StreetAddress" required>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="zip" class="form-label">Zip</label>
+                                <input type="text" class="form-control" id="zip" value="@friend.Address.ZipCode" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" value="@friend.Address.City" required>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label for="country" class="form-label">Country</label>
+                                <input type="text" class="form-control" id="country" value="@friend.Address.Country" required>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <a href="#add-edit-friend" class="w-100 btn btn-primary btn-lg my-4">Edit friend details</a>
-            </form>
+                    <a href="~/Edit/AddEditFriend?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4">Edit @friend.FirstName 's details</a>
+                </form>
+            </div> 
         </div>
 
         <div class="col-md-7 col-lg-8">
             <h3 class="pb-2">
-                My friend's pets
+                @friend.FirstName's pets
                 <a href="#add-edit-pet" class="btn btn-success btn-sm" type="button">Add</a>
             </h3>
 
-            <div class="row mb-2 text-center">
-                <div class="col-md-10 themed-grid-col">Wanda the happy fish</div>
-                <div class="col-md-2 themed-grid-col">
-                    <a href="#add-edit-pet" class="btn btn-secondary btn-sm" type="button">Edit</a>
-                    <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
-                </div>
+            <div class="row mb-2 text-center ">
+                @foreach(var pet in friend.Pets)
+                {
+                    <div class="col-md-10 themed-grid-col "> 
+                        <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind</span>
+                    </div>
+                    <div class="col-md-2 themed-grid-col">
+                        <a href="#add-edit-pet" class="btn btn-secondary btn-sm" type="button">Edit</a>
+                        <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
+                    </div>
+                }
             </div>
         </div>
 
         <div class="col-md-7 col-lg-8">
             <h3 class="pb-2">
-                My friend's favorite quotes
+                @friend.FirstName's favorite quotes
                 <a href="#list-of-quotes" class="btn btn-success btn-sm" type="button">Add</a>
             </h3>
 
             <div class="row mb-2 text-center">
-                <div class="col-md-10 themed-grid-col">
-                    Before you marry a person, you should first make them use a computer with slow Internet to see who they really are.
-                    <div class="col-md-16  text-end">Will Ferrell</div>
-                </div>
-                <div class="col-md-2 themed-grid-col">
-                    <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
-                </div>
+                @foreach (var quote in @friend.Quotes)
+                {
+                    <div class="col-md-10 themed-grid-col">
+                        <span class="form-control"> @quote.Quote 
+                            <div class="col-md-16 text-end" style="font-weight: bold;">@quote.Author</div>
+                        </span>
+                    </div>
+                    <div class="col-md-2 themed-grid-col">
+                        <a href="#add-edit-pet" class="btn btn-secondary btn-sm" type="button">Edit</a>
+                        <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
+                    </div>
+                }
             </div>
         </div>
-    </div>
+    }
 </div>
