@@ -1,6 +1,7 @@
 using AppStudies.SeidoHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Models;
 using Models.DTO;
 using Services;
@@ -22,6 +23,9 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
         //For Validation
         public reModelValidationResult ValidationResult { get; set; } = new reModelValidationResult(false, null, null);
+
+        public List<SelectListItem> Kind { get; set; } = new List<SelectListItem>().PopulateSelectList<enAnimalKind>();
+        public List<SelectListItem> Mood { get; set; } = new List<SelectListItem>().PopulateSelectList<enAnimalMood>();
 
 
         #region HTTP request
@@ -134,15 +138,73 @@ namespace AppGoodFriendsRazor.Pages.Edit
             return Redirect($"~/Edit/EditFriendDetail?id={FriendInput.FriendId}");
         }
 
+
+        public IActionResult OnPostEditPet(Guid petId)
+        {
+            int idx = FriendInput.Pets.FindIndex(a => a.PetId == petId);
+            string[] keys = { $"FriendInput.Pets[{idx}].editName",
+                              $"FriendInput.Pets[{idx}].editKind",
+                              $"FriendInput.Pets[{idx}].editMood"};
+
+            if (!ModelState.IsValidPartially(out reModelValidationResult validationResult, keys))
+            {
+                ValidationResult = validationResult;
+                return Page();
+            }
+
+            //Set the pets as Modified, it will later be updated in the database
+            var p = FriendInput.Pets.First(a => a.PetId == petId);
+
+            if (p == null)
+            {
+                return NotFound();
+            }
+            if (p.StatusIM != enStatusIM.Inserted)
+            {
+                p.StatusIM = enStatusIM.Modified;
+            }
+
+            //Implement the changes
+            p.Name = p.editName;
+            p.Kind = (enAnimalKind)p.editKind;
+            p.Mood = (enAnimalMood)p.editMood;
+            return Page();
+        }
+
+        public IActionResult OnPostAddPet()
+        {
+            string[] keys = { "FriendInput.NewPet.Name",
+                               "FriendInput.NewPet.Kind",
+                               "FriendInput.NewPet.Mood"};
+
+            if (!ModelState.IsValidPartially(out reModelValidationResult validationResult, keys))
+            {
+                ValidationResult = validationResult;
+                return Page();
+            }
+
+            //Set the pet as Inserted, it will later be inserted in the database
+            FriendInput.NewPet.StatusIM = enStatusIM.Inserted;
+
+            //Need to add a temp Guid so it can be deleted and editited in the form
+            //A correct Guid will be created by the DTO when Inserted into the database
+            FriendInput.NewPet.PetId = Guid.NewGuid();
+
+            //Add it to the Input Models pets
+            FriendInput.Pets.Add(new csPetIM(FriendInput.NewPet));
+
+            //Clear the NewPet so another pet can be added
+            FriendInput.NewPet = new csPetIM();
+
+            return Page();
+        }
+
+        #endregion
+        #region
         private async Task<IFriend> SavePets()
         {
             //Check if there are deleted Pets, if so simply remove them
             var deletedPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Deleted));
-            foreach (var item in deletedPets)
-            {
-                //Remove from the database
-                await service.DeletePetAsync(usr, item.PetId);
-            }
 
             //Check if there are any new pets added, if so create them in the database
             var newPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Inserted));
@@ -184,7 +246,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
             return f;
         }
-
         #endregion
 
         #region Constructor
