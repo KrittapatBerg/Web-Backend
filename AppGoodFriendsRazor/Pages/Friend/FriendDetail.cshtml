@@ -64,52 +64,58 @@
                             </div>
                         </div>
                     </div>
-
-                    <a href="~/Edit/AddEditFriend?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4">Edit @friend.FirstName 's details</a>
+                    
                 </form>
             </div> 
         </div>
 
         <div class="col-md-7 col-lg-8">
-            <h3 class="pb-2">
-                @friend.FirstName's pets
-                <a href="#add-edit-pet" class="btn btn-success btn-sm" type="button">Add</a>
-            </h3>
-
-            <div class="row mb-2 text-center ">
-                @foreach(var pet in friend.Pets)
+            <div class="form-group">
+                @if (friend.Pets != null && friend.Pets.Any())
                 {
-                    <div class="col-md-10 themed-grid-col "> 
-                        <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind</span>
+                    <h3 class="pb-2">
+                        @friend.FirstName's pets
+                    </h3>
+                    <div class="row mb-2 text-center ">
+                        @foreach (var pet in friend.Pets)
+                        {
+                            <div class="col-md-10 themed-grid-col "> 
+                                <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind</span>
+                            </div>
+                        }
                     </div>
-                    <div class="col-md-2 themed-grid-col">
-                        <a href="#add-edit-pet" class="btn btn-secondary btn-sm" type="button">Edit</a>
-                        <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
-                    </div>
+                }
+                else
+                {
+                    <div class="form-control mb-3"> Has no pets</div> 
                 }
             </div>
         </div>
 
         <div class="col-md-7 col-lg-8">
-            <h3 class="pb-2">
-                @friend.FirstName's favorite quotes
-                <a href="#list-of-quotes" class="btn btn-success btn-sm" type="button">Add</a>
-            </h3>
-
-            <div class="row mb-2 text-center">
-                @foreach (var quote in @friend.Quotes)
+            <div class="form-group">
+                <h3 class="pb-2">@friend.FirstName's favorite quotes </h3> 
+                @if (friend.Quotes != null && friend.Quotes.Any())
                 {
-                    <div class="col-md-10 themed-grid-col">
-                        <span class="form-control"> @quote.Quote 
-                            <div class="col-md-16 text-end" style="font-weight: bold;">@quote.Author</div>
-                        </span>
+                    <div class="row mb-2 text-center">
+                        @foreach (var quote in @friend.Quotes)
+                        {
+                            <div class="col-md-10 themed-grid-col">
+                                <span class="form-control"> @quote.Quote 
+                                    <div class="col-md-16 text-end" style="font-weight: bold;">@quote.Author</div>
+                                </span>
+                            </div>
+                        }
                     </div>
-                    <div class="col-md-2 themed-grid-col">
-                        <a href="#add-edit-pet" class="btn btn-secondary btn-sm" type="button">Edit</a>
-                        <a href="#modals" class="btn btn-danger btn-sm" type="button">Delete</a>
-                    </div>
+                }
+                else
+                {
+                    <div class="form-control mb-3"> Has no quotes</div> 
                 }
             </div>
         </div>
+
+        <a href="~/Edit/ViewFriendPetQuote?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Edit @friend.FirstName </a>
+        @*<a href="~/Edit/AddEditFriend?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4">Edit @friend.FirstName 's details</a>*@
     }
 </div>
