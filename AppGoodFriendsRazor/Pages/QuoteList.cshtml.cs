@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Models;
 using Models.DTO;
@@ -15,21 +14,23 @@ namespace AppGoodFriendsRazor.Pages
 
         //TODO: I want the same collapsable editable from AppStudies->InputModelListAdd 
         //    : Make it Input Model 
-        [BindProperty]
-        public List<csQuoteIM> QuotesIM { get; set; }
+        //[BindProperty]
+        //public List<csQuoteIM> QuotesIM { get; set; }
 
-        [BindProperty]
-        public csQuoteIM NewQuoteIM { get; set; } = new csQuoteIM();
-        //public List<IFriend> QuotesList { get; set; } = new List<IFriend>();
+        //[BindProperty]
+        //public csQuoteIM NewQuoteIM { get; set; } = new csQuoteIM();
+        public List<IFriend> QuotesList { get; set; } = new List<IFriend>();
 
         #region HTTP Requests 
         public async Task OnGetAsync()
         {
             var quote = await service.ReadFriendsAsync(usr, true, false, "", 0, 100);
-            //QuotesIM = quote.Select(q => new csQuoteIM(q)).ToList();
+            QuotesList = quote.ToList();
 
         }
 
+
+        /*
         public IActionResult OnPostEdit(Guid quoteId)
         {
             //Set the Quote as Modified, it will later be updated in the database
@@ -97,6 +98,7 @@ namespace AppGoodFriendsRazor.Pages
 
             return Page();
         }
+        */
         #endregion
 
 
@@ -109,60 +111,61 @@ namespace AppGoodFriendsRazor.Pages
         #endregion
 
         #region Input Model
-        public enum enStatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
+        /* public enum enStatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
 
-        public class csQuoteIM
-        {
-            //Status of InputModel
-            public enStatusIM StatusIM { get; set; }
+         public class csQuoteIM
+         {
+             //Status of InputModel
+             public enStatusIM StatusIM { get; set; }
 
-            //Properties from Model which is to be edited in the <form>
-            public Guid QuoteId { get; set; } = Guid.NewGuid();
-            public Guid FriendId { get; set; }
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string Quote { get; set; }
-            public string Author { get; set; }
+             //Properties from Model which is to be edited in the <form>
+             public Guid QuoteId { get; set; } = Guid.NewGuid();
+             public Guid FriendId { get; set; }
+             public string FirstName { get; set; }
+             public string LastName { get; set; }
+             public string Quote { get; set; }
+             public string Author { get; set; }
 
-            //Added properites to edit in the list with undo
-            public string editQuote { get; set; }
-            public string editAuthor { get; set; }
+             //Added properites to edit in the list with undo
+             public string editQuote { get; set; }
+             public string editAuthor { get; set; }
 
-            #region constructors and model update
-            public csQuoteIM() { StatusIM = enStatusIM.Unchanged; }
+             #region constructors and model update
+             public csQuoteIM() { StatusIM = enStatusIM.Unchanged; }
 
-            //Copy constructor
-            public csQuoteIM(csQuoteIM original)
-            {
-                StatusIM = original.StatusIM;
+             //Copy constructor
+             public csQuoteIM(csQuoteIM original)
+             {
+                 StatusIM = original.StatusIM;
 
-                QuoteId = original.QuoteId;
-                Quote = original.Quote;
-                Author = original.Author;
+                 QuoteId = original.QuoteId;
+                 Quote = original.Quote;
+                 Author = original.Author;
 
-                editQuote = original.editQuote;
-                editAuthor = original.editAuthor;
-            }
+                 editQuote = original.editQuote;
+                 editAuthor = original.editAuthor;
+             }
 
-            //Model => InputModel constructor
-            public csQuoteIM(IQuote original)  //or use the Dto one 
-            {
-                StatusIM = enStatusIM.Unchanged;
-                QuoteId = original.QuoteId;
-                Quote = editQuote = original.Quote;
-                Author = editAuthor = original.Author;
-            }
+             //Model => InputModel constructor
+             public csQuoteIM(IQuote original)  //or use the Dto one 
+             {
+                 StatusIM = enStatusIM.Unchanged;
+                 QuoteId = original.QuoteId;
+                 Quote = editQuote = original.Quote;
+                 Author = editAuthor = original.Author;
+             }
 
-            //InputModel => Model
-            public csQuoteCUdto UpdateModel(csQuoteCUdto model)
-            {
-                model.QuoteId = QuoteId;
-                model.Quote = Quote;
-                model.Author = Author;
-                return model;
-            }
-            #endregion
-        }
+             //InputModel => Model
+             public csQuoteCUdto UpdateModel(csQuoteCUdto model)
+             {
+                 model.QuoteId = QuoteId;
+                 model.Quote = Quote;
+                 model.Author = Author;
+                 return model;
+             }
+             #endregion
+         }
+         */
         #endregion
     }
 }

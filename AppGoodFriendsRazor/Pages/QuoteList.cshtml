@@ -10,8 +10,8 @@
     <h2 class="pb-2 border-bottom">List of all quotes</h2>
 
     <h5>Below are friends' favorite quote </h5>
-@* 
-        @foreach (var info in Model.QuotesIM)
+ 
+        @foreach (var info in Model.QuotesList)
         {
             <div class="form-control">
 
@@ -22,30 +22,20 @@
                         <span class="form-control"> @info.FirstName  @info.LastName</span>
                     </div>
                     <div class="col-md-10 themed-grid-col">
-                    <label for="quote" class="form-label" style="font-weight: bold;"> Quotes </label>
-                        @foreach (var quote in info.Quotes)
-                        {
-                            <span class="form-control">
-                                @quote.Quote
-                                <p class="col-md-16  text-end"> <b> @quote.Author </b> </p>
-                            </span>
+                        <label for="quote" class="form-label" style="font-weight: bold;"> Quotes </label>
+                            @foreach (var quote in info.Quotes)
+                            {
+                                <span class="form-control">
+                                    @quote.Quote
+                                    <p class="col-md-16  text-end"> <b> @quote.Author </b> </p>
+                                </span>
 
-                            <div class="col-md-2 themed-grid-col">
-                                <a href="~/Edit/AddEditQuote?id=@quote.QuoteId" class="btn btn-secondary btn-sm" type="button">Edit</a>
-                            </div>
-                        }
-                        <button class="btn btn-secondary btn-sm m-1" type="button"> Edit = this button is for collapsable  </button>
-                               @* data-bs-toggle="collapse" data-bs-target="#collapseEdit_@Model.QuotesIM[k].QuoteId"
-                                data-seido-selected-item-id="@Model.QuotesIM[k].QuoteId"> 
-                                Edit
-                                </button>
-                                
-            </div> 
-
+                                <div class="col-md-2 themed-grid-col">
+                                    <a href="~/Friend/FriendDetail?id=@info.FriendId" class="btn btn-secondary btn-sm" type="button">Go to @info.FirstName </a>
+                                </div>
+                            }
+                    </div> 
                 </div>
             </div>
         }
-        *@
-
-
 </div>

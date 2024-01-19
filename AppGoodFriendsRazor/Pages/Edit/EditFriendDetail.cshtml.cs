@@ -8,16 +8,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppGoodFriendsRazor.Pages.Edit
 {
-    public class ViewFriendPetQuoteModel : PageModel
+    public class EditFriendDetailModel : PageModel
     {
         IFriendsService service = null;
-        ILogger<ViewFriendPetQuoteModel> logger = null;
+        ILogger<EditFriendDetailModel> logger = null;
         loginUserSessionDto usr = null;
 
         [BindProperty]
         public csViewFriendIM FriendInput { get; set; }
 
-        // public csFriend ViewFriend { get; set; }
+        [BindProperty]
+        public string PageHeader { get; set; }
 
         //For Validation
         public reModelValidationResult ValidationResult { get; set; } = new reModelValidationResult(false, null, null);
@@ -31,20 +32,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 //Read a friend
                 var friend = await service.ReadFriendAsync(usr, id, false);
 
-                //ViewFriend = new csFriend()
-                //{
-
-                //    FriendId = id,
-                //    FirstName = friend.FirstName,
-                //    LastName = friend.LastName,
-                //    Email = friend.Email,
-                //    Birthday = friend.Birthday,
-                //    Address = friend.Address,
-                //    Pets = friend.Pets,
-                //    Quotes = friend.Quotes
-                //};
-
                 FriendInput = new csViewFriendIM(friend);
+                PageHeader = "Edit details of a friend";
 
             }
             else
@@ -52,6 +41,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 //create an empty friend 
                 FriendInput = new csViewFriendIM();
                 FriendInput.StatusIM = enStatusIM.Inserted;
+                PageHeader = "Create a new a friend";
+
             }
             return Page();
         }
@@ -140,7 +131,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 return Redirect($"~/Friend/ListOfFriend");
             }
 
-            return Redirect($"~/Edit/ViewFriendPetQuote?id={FriendInput.FriendId}");
+            return Redirect($"~/Edit/EditFriendDetail?id={FriendInput.FriendId}");
         }
 
         private async Task<IFriend> SavePets()
@@ -197,7 +188,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
         #endregion
 
         #region Constructor
-        public ViewFriendPetQuoteModel(IFriendsService service, ILogger<ViewFriendPetQuoteModel> logger)
+        public EditFriendDetailModel(IFriendsService service, ILogger<EditFriendDetailModel> logger)
         {
             this.service = service;
             this.logger = logger;
