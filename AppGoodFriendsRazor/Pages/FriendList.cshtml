@@ -27,15 +27,24 @@
                     </div>
 
                     <div class="col-md-10 themed-grid-col">
-                    <label for="address" class="form-label" style="font-weight: bold;">Address </label>
-                        @if (@item.Address != null)
-                        {
-                        <span class="form-control"> @item.Address</span>
-                        }
-                        else
-                        {
-                            <span class="form-control"> N/A </span>
-                        }
+                        <div class="row g-3 visible">
+                            <label for="address" class="form-label" style="font-weight: bold;">Address </label>
+                            @if (@item.Address != null)
+                            {
+                                <div class="col-12">
+                                    <span class="form-control"> @item.Address.StreetAddress</span> </div>
+                                <div class="col-md-3">
+                                    <span class="form-control"> @item.Address.ZipCode</span> </div>
+                                <div class="col-md-4">
+                                    <span class="form-control"> @item.Address.City</span> </div>
+                                <div class="col-md-5">
+                                    <span class="form-control"> @item.Address.Country</span> </div> 
+                            }
+                            else
+                            {
+                                <span class="form-control"> N/A </span>
+                            }
+                        </div>
                     </div>
 
                     <div class="col-md-10 themed-grid-col">
@@ -43,50 +52,25 @@
                         <span class="form-control"> @item.Email</span>
                     </div>
                     
-                    <div class="col-md-10 themed-grid-col">
+                    <div class="col-md-5 themed-grid-col">
                     <label for="pet" class="form-label" style="font-weight: bold;">Pets </label>
-                        @if (@item.Pets != null && @item.Pets.Any())
-                        { 
-                            @foreach (var pet in @item.Pets)
-                            {
-                                <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind </span>
-                            } 
-                        }
-                        else
-                        {
-                            <span class="form-control"> has no pets </span>
-
-                        }
+                        <span class="form-control"> @item.Pets.Count </span>
                     </div>
 
-                    <div class="col-md-10 themed-grid-col">
+                    <div class="col-md-5 themed-grid-col">
                     <label for="quote" class="form-label" style="font-weight: bold;">Quotes </label>
-                        @if (@item.Quotes != null && @item.Quotes.Any())
-                        {
-                            @foreach (var quote in @item.Quotes)
-                            {
-                                <span class="form-control"> @quote.Quote 
-                                    <p class="col-md-16  text-end"> <b> @quote.Author </b> </p>
-                                </span>
-                            }
-                        }
-                        else
-                        {
-                            <div class="form-control mb-3"> Has no favorite quotes</div>
-                        }
+                        <span class="form-control"> @item.Quotes.Count </span>
                     </div>
                 </div>
-            <div class="col-md-2 themed-grid-col">
-                <a href="~/Friend/FriendDetail?id=@item.FriendId" class="btn btn-primary btn-sm" type="button">View @item.FirstName's detail </a>
-            </div>
+                    
+                <div class="col-md-2 themed-grid-col">
+                        <a href="~/Friend/FriendDetail?id=@item.FriendId" class="btn btn-primary btn-sm" type="button">View @item.FirstName's detail </a>
+                </div>
             </div>
         }
 
     <div class="col-md-2 themed-grid-col">
-            <a class="btn btn-primary" href="~/Friend/FriendsByCountry" role="button">See good friends by country </a>
+        <a class="w-100 btn btn-primary btn-lg my-4" href="~/Friend/FriendsByCountry" type="button">See good friends by country </a>
     </div>
 
-    <div class="col-md-2 themed-grid-col">
-            <a class="btn btn-primary" href="~/Edit/AddEditFriend" role="button"> Add a new friend ? <br />Click me </a>
-    </div>
 </div>
