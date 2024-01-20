@@ -28,8 +28,16 @@
 
                     <div class="col-md-10 themed-grid-col">
                     <label for="address" class="form-label" style="font-weight: bold;">Address </label>
+                        @if (@item.Address != null)
+                        {
                         <span class="form-control"> @item.Address</span>
+                        }
+                        else
+                        {
+                            <span class="form-control"> N/A </span>
+                        }
                     </div>
+
                     <div class="col-md-10 themed-grid-col">
                     <label for="email" class="form-label" style="font-weight: bold;">Email </label>
                         <span class="form-control"> @item.Email</span>
@@ -37,22 +45,40 @@
                     
                     <div class="col-md-10 themed-grid-col">
                     <label for="pet" class="form-label" style="font-weight: bold;">Pets </label>
+                        @if (@item.Pets != null && @item.Pets.Any())
+                        { 
                             @foreach (var pet in @item.Pets)
                             {
                                 <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind </span>
                             } 
+                        }
+                        else
+                        {
+                            <span class="form-control"> has no pets </span>
+
+                        }
                     </div>
 
                     <div class="col-md-10 themed-grid-col">
                     <label for="quote" class="form-label" style="font-weight: bold;">Quotes </label>
+                        @if (@item.Quotes != null && @item.Quotes.Any())
+                        {
                             @foreach (var quote in @item.Quotes)
                             {
                                 <span class="form-control"> @quote.Quote 
                                     <p class="col-md-16  text-end"> <b> @quote.Author </b> </p>
                                 </span>
                             }
+                        }
+                        else
+                        {
+                            <div class="form-control mb-3"> Has no favorite quotes</div>
+                        }
                     </div>
                 </div>
+            <div class="col-md-2 themed-grid-col">
+                <a href="~/Friend/FriendDetail?id=@item.FriendId" class="btn btn-primary btn-sm" type="button">View @item.FirstName's detail </a>
+            </div>
             </div>
         }
 
