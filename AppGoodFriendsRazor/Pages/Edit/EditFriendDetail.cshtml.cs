@@ -135,7 +135,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 return Redirect($"~/Friend/ListOfFriend");
             }
 
-            return Redirect($"~/Edit/EditFriendDetail?id={FriendInput.FriendId}");
+            return Redirect($"~/Friend/FriendDetail?id={FriendInput.FriendId}");
         }
 
 
@@ -153,7 +153,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             }
 
             //Set the pets as Modified, it will later be updated in the database
-            var p = FriendInput.Pets.First(a => a.PetId == petId);
+            var p = FriendInput.Pets.FirstOrDefault(a => a.PetId == petId);
 
             if (p == null)
             {
@@ -164,10 +164,21 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 p.StatusIM = enStatusIM.Modified;
             }
 
+            // Check for null before accessing properties
             //Implement the changes
-            p.Name = p.editName;
-            p.Kind = (enAnimalKind)p.editKind;
-            p.Mood = (enAnimalMood)p.editMood;
+            if (p.editName != null)
+            {
+                p.Name = p.editName;
+            }
+            if (p.editKind != null)
+            {
+                p.Kind = (enAnimalKind)p.editKind;
+            }
+            if (p.editMood != null)
+            {
+                p.Mood = (enAnimalMood)p.editMood;
+            }
+
             return Page();
         }
 

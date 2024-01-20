@@ -10,15 +10,7 @@ namespace AppGoodFriendsRazor.Pages
         IFriendsService service;
         ILogger<QuoteListModel> logger;
         loginUserSessionDto usr;
-        csQuoteCUdto item;
 
-        //TODO: I want the same collapsable editable from AppStudies->InputModelListAdd 
-        //    : Make it Input Model 
-        //[BindProperty]
-        //public List<csQuoteIM> QuotesIM { get; set; }
-
-        //[BindProperty]
-        //public csQuoteIM NewQuoteIM { get; set; } = new csQuoteIM();
         public List<IFriend> QuotesList { get; set; } = new List<IFriend>();
 
         #region HTTP Requests 

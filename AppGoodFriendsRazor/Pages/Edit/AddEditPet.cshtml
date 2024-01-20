@@ -6,14 +6,15 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @attribute [IgnoreAntiforgeryToken]
 
-<div class="container px-4 py-4" id="add-and-edit-pets">
-    <h2 class="pb-2 border-bottom">Add and Edit Pets of a Friend</h2>
-    <p>Here are some pets of a friend. Click to add or edit pets on the list</p>
-
-</div>
+<a href="javascript:window.history.back()" class="text-decoration-none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-left bi-2x" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M5.354 11.354a.5.5 0 0 1 0-.708L2.707 8.5l2.647-2.646a.5.5 0 0 1 .708.708L4.207 8.5l1.854 1.854a.5.5 0 0 1-.708.708z" />
+        <path fill-rule="evenodd" d="M3 8.5a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3.5a.5.5 0 0 1-.5-.5z" />
+    </svg>
+</a>
 
 <div class="container px-4 py-4" id="add-edit-pet">
-    <h2 class="pb-2 border-bottom">Add or edit a pet's details</h2>
+    <h2 class="pb-2 border-bottom">Add or Edit Pets of a Friend</h2>
     <p>Fill in the details below to add a pet.</p>
     <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
         <div class="col-md-7 col-lg-8">
