@@ -12,15 +12,6 @@
     <h5>Below are friends' details </h5>
     <div class="row g-3 visible">
 
-        <div class="row mb-1 text-center">
-            <div class="col-md-8 ">
-                <form class="d-flex mt-3 mt-lg-0" role="search" method="post">
-                    <input asp-for="SearchFilter" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button asp-page-handler="Search" class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-
         @foreach (var item in Model.FriendsList)
         {
             <div class="form-control row g-3 visible">
