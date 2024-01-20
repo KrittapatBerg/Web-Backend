@@ -10,10 +10,20 @@
     <h2 class="pb-2 border-bottom">List of all friends</h2>
 
     <h5>Below are friends' details </h5>
+    <div class="row g-3 visible">
+
+        <div class="row mb-1 text-center">
+            <div class="col-md-8 ">
+                <form class="d-flex mt-3 mt-lg-0" role="search" method="post">
+                    <input asp-for="SearchFilter" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button asp-page-handler="Search" class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+
         @foreach (var item in Model.FriendsList)
         {
-            <div class="form-control">
-
+            <div class="form-control row g-3 visible">
                 <div class="row mb-2 text-secondary-emphasis">
 
                     <div class="col-md-10 themed-grid-col">
@@ -21,9 +31,15 @@
                         <span class="form-control"> @item.FirstName  @item.LastName</span>
                     </div>
 
-                    <div class="col-md-10 themed-grid-col">
-                    <label for="birthday" class="form-label" style="font-weight: bold;">Born </label>
-                    <span class="form-control"> @(item.Birthday.HasValue ? item.Birthday.Value.ToString("yyyy-MM-dd") : "N/A")</span>
+                    <div class="row g-3 visible">
+                        <div class="col-md-5">
+                            <label for="birthday" class="form-label" style="font-weight: bold;">Born </label>
+                            <span class="form-control"> @(item.Birthday.HasValue ? item.Birthday.Value.ToString("yyyy-MM-dd") : "N/A")</span>
+                        </div>
+                        <div class="col-md-5">
+                                <label for="email" class="form-label" style="font-weight: bold;">Email </label>
+                                <span class="form-control"> @item.Email</span>
+                        </div>
                     </div>
 
                     <div class="col-md-10 themed-grid-col">
@@ -31,13 +47,13 @@
                             <label for="address" class="form-label" style="font-weight: bold;">Address </label>
                             @if (@item.Address != null)
                             {
-                                <div class="col-12">
+                                <div class="col-md-6">
                                     <span class="form-control"> @item.Address.StreetAddress</span> </div>
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     <span class="form-control"> @item.Address.ZipCode</span> </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <span class="form-control"> @item.Address.City</span> </div>
-                                <div class="col-md-5">
+                                <div class="col-md-6">
                                     <span class="form-control"> @item.Address.Country</span> </div> 
                             }
                             else
@@ -45,11 +61,6 @@
                                 <span class="form-control"> N/A </span>
                             }
                         </div>
-                    </div>
-
-                    <div class="col-md-10 themed-grid-col">
-                    <label for="email" class="form-label" style="font-weight: bold;">Email </label>
-                        <span class="form-control"> @item.Email</span>
                     </div>
                     
                     <div class="col-md-5 themed-grid-col">
@@ -63,14 +74,14 @@
                     </div>
                 </div>
                     
-                <div class="col-md-2 themed-grid-col">
+                <div class="col-md-12 themed-grid-col">
                         <a href="~/Friend/FriendDetail?id=@item.FriendId" class="btn btn-primary btn-sm" type="button">View @item.FirstName's detail </a>
                 </div>
             </div>
         }
-
-    <div class="col-md-2 themed-grid-col">
-        <a class="w-100 btn btn-primary btn-lg my-4" href="~/Friend/FriendsByCountry" type="button">See good friends by country </a>
+        <div class="col-md-2 themed-grid-col">
+            <a class="w-100 btn btn-primary btn-lg my-4" href="~/Friend/FriendsByCountry" type="button">See good friends by country </a>
+        </div>
     </div>
 
 </div>

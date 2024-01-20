@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Models;
 using Models.DTO;
@@ -12,6 +13,19 @@ namespace AppGoodFriendsRazor.Pages
         loginUserSessionDto usr = null;
 
         public List<IFriend> FriendsList { get; set; } = new List<IFriend>();
+
+        //Pagination
+        public int NrOfPages { get; set; }
+        public int PageSize { get; } = 5;
+
+        public int ThisPageNr { get; set; } = 0;
+        public int PrevPageNr { get; set; } = 0;
+        public int NextPageNr { get; set; } = 0;
+        public int PresentPages { get; set; } = 0;
+
+        //ModelBinding for the form
+        [BindProperty]
+        public string SearchFilter { get; set; } = null;
 
         #region HTTP request
         public async Task OnGet()
