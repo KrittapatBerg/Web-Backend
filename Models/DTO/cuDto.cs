@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics.Metrics;
-using System.Reflection.Emit;
-using System.Xml.Linq;
-
-namespace Models.DTO
+﻿namespace Models.DTO
 {
     //DTO is a DataTransferObject, can be instanstiated by the controller logic
     //and represents a, fully instatiable, subset of the Database models

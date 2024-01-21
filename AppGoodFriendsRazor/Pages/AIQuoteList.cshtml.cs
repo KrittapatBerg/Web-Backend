@@ -1,34 +1,32 @@
 using AppStudies.SeidoHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Models;
 using Models.DTO;
 using Services;
 using System.ComponentModel.DataAnnotations;
 
-namespace AppGoodFriendsRazor.Pages.Edit
+namespace AppGoodFriendsRazor.Pages
 {
-    public class EditFriendDetailModel : PageModel
+    public class AIQuoteListModel : PageModel
     {
-        IFriendsService service = null;
-        ILogger<EditFriendDetailModel> logger = null;
-        loginUserSessionDto usr = null;
+        IFriendsService service;
+        ILogger<AIQuoteListModel> logger;
+        loginUserSessionDto usr;
 
-        [BindProperty]
-        public csViewFriendIM FriendInput { get; set; }
-
-        [BindProperty]
-        public string PageHeader { get; set; }
-
-        //For enum Pet
-        public List<SelectListItem> Kind { get; set; } = new List<SelectListItem>().PopulateSelectList<enAnimalKind>();
-        public List<SelectListItem> Mood { get; set; } = new List<SelectListItem>().PopulateSelectList<enAnimalMood>();
+        public csViewFriendIM QuoteInput { get; set; }
+        public List<IFriend> QuotesList { get; set; } = new List<IFriend>();
 
         //For Validation
         public reModelValidationResult ValidationResult { get; set; } = new reModelValidationResult(false, null, null);
 
-        #region HTTP request
+        #region HTTP Requests 
+        //public async Task OnGetAsync()
+        //{
+        //    var quote = await service.ReadFriendsAsync(usr, true, false, "", 0, 100);
+        //    QuotesList = quote.ToList();
+        //}
+
         public async Task<IActionResult> OnGetAsync()
         {
             if (Guid.TryParse(Request.Query["id"], out Guid id))
@@ -36,159 +34,25 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 //Read a friend
                 var friend = await service.ReadFriendAsync(usr, id, false);
 
-                FriendInput = new csViewFriendIM(friend);
-                PageHeader = "Edit details of a friend";
+                QuoteInput = new csViewFriendIM(friend);
 
             }
             else
             {
                 //create an empty friend 
-                FriendInput = new csViewFriendIM();
-                FriendInput.StatusIM = enStatusIM.Inserted;
-                FriendInput.Pets = new List<csPetIM> { new csPetIM() };
-                FriendInput.Quotes = new List<csQuoteIM> { new csQuoteIM() };
+                QuoteInput = new csViewFriendIM();
+                QuoteInput.StatusIM = enStatusIM.Inserted;
+                QuoteInput.Pets = new List<csPetIM> { new csPetIM() };
+                QuoteInput.Quotes = new List<csQuoteIM> { new csQuoteIM() };
 
-                PageHeader = "Create a new a friend";
             }
             return Page();
         }
 
-
-        public async Task<IActionResult> OnPostSave()
+        public IActionResult OnPostAddQuote()
         {
-            string[] keys = { "FriendInput.FirstName",
-                              "FriendInput.LastName",
-                              "FriendInput.Email"};
-
-            if (!ModelState.IsValidPartially(out reModelValidationResult validationResult, keys))
-            {
-                ValidationResult = validationResult;
-                return Page();
-            }
-
-            //First, are we creating a new Friend or editing another
-            if (FriendInput.StatusIM == enStatusIM.Inserted)
-            {
-                var fDto = new csFriendCUdto();
-
-                //create the Friend in the database
-                fDto.FirstName = FriendInput.FirstName;
-                fDto.FirstName = FriendInput.LastName;
-                fDto.Email = FriendInput.Email;
-
-                // use AddressId from FriendInput.Address
-                fDto.AddressId = FriendInput.Address.AddressId;
-
-
-                var newF = await service.CreateFriendAsync(usr, fDto);
-                //get the newly created FriendId
-                FriendInput.FriendId = newF.FriendId;
-
-            }
-            // använd AddressId från FriendInput.Address
-            var addressDto = new csAddressCUdto
-            {
-                AddressId = FriendInput.Address.AddressId,
-                StreetAddress = FriendInput.Address.StreetAddress,
-                ZipCode = FriendInput.Address.ZipCode,
-                City = FriendInput.Address.City,
-                Country = FriendInput.Address.Country
-            };
-
-
-
-            //Do all updates for Pets
-            IFriend f = await SavePets();
-
-            // Do all updates for Quotes
-            //f = await SaveQuotes();
-
-            //Finally, update the friend itself
-            f.FirstName = FriendInput.FirstName;
-            f.LastName = FriendInput.LastName;
-            f.Email = FriendInput.Email;
-
-
-            // använd AddressId från FriendInput.Address
-            var address = new csAddress
-            {
-                AddressId = FriendInput.Address.AddressId,
-                StreetAddress = FriendInput.Address.StreetAddress,
-                ZipCode = FriendInput.Address.ZipCode,
-                City = FriendInput.Address.City,
-                Country = FriendInput.Address.Country
-            };
-
-            // Uppdatera befintlig adress
-            var updatedAddress = await service.UpdateAddressAsync(usr, addressDto);
-            f.Address = updatedAddress;
-
-
-            var csFriendInstance = await service.UpdateFriendAsync(usr, new csFriendCUdto(f));
-
-            if (csFriendInstance == null)
-            {
-                // Handle the case where UpdateFriendAsync does not return a csFriend
-                throw new InvalidOperationException("UpdateFriendAsync did not return a csFriend instance.");
-            }
-            f = csFriendInstance;
-
-            if (FriendInput.StatusIM == enStatusIM.Inserted)
-            {
-                return Redirect($"~/Friend/ListOfFriend");
-            }
-
-            return Redirect($"~/Friend/FriendDetail?id={FriendInput.FriendId}");
-        }
-
-        public IActionResult OnPostEditPet(Guid petId)
-        {
-            int idx = FriendInput.Pets.FindIndex(a => a.PetId == petId);
-            string[] keys = { $"FriendInput.Pets[{idx}].editName",
-                              $"FriendInput.Pets[{idx}].editKind",
-                              $"FriendInput.Pets[{idx}].editMood"};
-
-            if (!ModelState.IsValidPartially(out reModelValidationResult validationResult, keys))
-            {
-                ValidationResult = validationResult;
-                return Page();
-            }
-
-            //Set the pets as Modified, it will later be updated in the database
-            var p = FriendInput.Pets.FirstOrDefault(a => a.PetId == petId);
-
-            if (p == null)
-            {
-                return NotFound();
-            }
-            if (p.StatusIM != enStatusIM.Inserted)
-            {
-                p.StatusIM = enStatusIM.Modified;
-            }
-
-            // Check for null before accessing properties
-            //Implement the changes
-            if (p.editName != null)
-            {
-                p.Name = p.editName;
-            }
-            if (p.editKind != null)
-            {
-                p.Kind = (enAnimalKind)p.editKind;
-            }
-            if (p.editMood != null)
-            {
-                p.Mood = (enAnimalMood)p.editMood;
-            }
-
-            return Page();
-        }
-
-        public IActionResult OnPostAddPet()
-        {
-            string[] keys = { "FriendInput.NewPet.Name",
-                               "FriendInput.NewPet.Kind",
-                               "FriendInput.NewPet.Mood"};
+            string[] keys = { "QuoteInput.NewQuote.Quote",
+                               "QuoteInput.NewQuote.Author"};
 
             if (!ModelState.IsValidPartially(out reModelValidationResult validationResult, keys))
             {
@@ -197,73 +61,26 @@ namespace AppGoodFriendsRazor.Pages.Edit
             }
 
             //Set the pet as Inserted, it will later be inserted in the database
-            FriendInput.NewPet.StatusIM = enStatusIM.Inserted;
+            QuoteInput.NewQuote.StatusIM = enStatusIM.Inserted;
 
             //Need to add a temp Guid so it can be deleted and editited in the form
             //A correct Guid will be created by the DTO when Inserted into the database
-            FriendInput.NewPet.PetId = Guid.NewGuid();
+            QuoteInput.NewQuote.QuoteId = Guid.NewGuid();
 
             //Add it to the Input Models pets
-            FriendInput.Pets.Add(new csPetIM(FriendInput.NewPet));
+            QuoteInput.Quotes.Add(new csQuoteIM(QuoteInput.NewQuote));
 
             //Clear the NewPet so another pet can be added
-            FriendInput.NewPet = new csPetIM();
+            QuoteInput.NewQuote = new csQuoteIM();
 
-            return Redirect($"~/Friend/FriendDetail?id={FriendInput.FriendId}");
+            return Redirect($"~/Friend/FriendDetail?id={QuoteInput.FriendId}");
         }
 
         #endregion
 
-        #region save pet
-        private async Task<IFriend> SavePets()
-        {
-            //Check if there are deleted Pets, if so simply remove them
-            var deletedPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Deleted));
 
-            //Check if there are any new pets added, if so create them in the database
-            var newPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Inserted));
-            var pf = await service.ReadFriendAsync(usr, FriendInput.FriendId, false);
-            var dtopF = new csFriendCUdto(pf);
-            foreach (var item in newPets)
-            {
-                //Create the corresposning model and CUdto objects
-                var model = item.UpdateModel(new csPet());
-                var cuDto = new csPetCUdto(model) { FriendId = FriendInput.FriendId };
-
-                //Set the relationships of a newly created item and write to database
-                cuDto.FriendId = FriendInput.FriendId;
-                model = await service.CreatePetAsync(usr, cuDto);
-
-                dtopF.PetsId.Add(model.PetId);
-
-            }
-
-            //To update modified and deleted pets, lets first read the original
-            //Note that now the deleted pets will be removed and created pets will be nicely included
-            var f = await service.UpdateFriendAsync(usr, dtopF);
-
-
-            //Check if there are any modified pets , if so update them in the database
-            var modifiedPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Modified));
-            foreach (var item in modifiedPets)
-            {
-                var model = f.Pets.First(a => a.PetId == item.PetId);
-
-                //Update the model from the InputModel
-                model = item.UpdateModel(model);
-
-                //Updatet the model in the database
-                model = await service.UpdatePetAsync(usr, new csPetCUdto(model) { FriendId = FriendInput.FriendId });
-            }
-
-            f = await service.ReadFriendAsync(usr, FriendInput.FriendId, false);
-
-            return f;
-        }
-        #endregion
-
-        #region Constructor
-        public EditFriendDetailModel(IFriendsService service, ILogger<EditFriendDetailModel> logger)
+        #region Constuctor
+        public AIQuoteListModel(IFriendsService service, ILogger<AIQuoteListModel> logger)
         {
             this.service = service;
             this.logger = logger;
@@ -538,7 +355,5 @@ namespace AppGoodFriendsRazor.Pages.Edit
         }
 
         #endregion
-
     }
-
 }

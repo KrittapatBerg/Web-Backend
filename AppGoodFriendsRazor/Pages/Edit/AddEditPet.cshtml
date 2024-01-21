@@ -14,26 +14,67 @@
 </a>
 
 <div class="container px-4 py-4" id="add-edit-pet">
-    <h2 class="pb-2 border-bottom">Add or Edit Pets of a Friend</h2>
-    <p>Fill in the details below to add a pet.</p>
     <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
         <div class="col-md-7 col-lg-8">
             <form class="needs-validation" novalidate>
+                <div class="col-md-7 col-lg-10 ">
+                    <!--To keep between Posts -->
+                    <input asp-for="PageHeader" value="@Model.PageHeader" type="hidden" />
+
+                    <!-- Server side validation errors, rough but just in case client side validation is not working or tampered with -->
+                    @if (Model.ValidationResult.HasErrors)
+                    {
+                        <div class="row g-3">
+                            @foreach (var item in Model.ValidationResult.ErrorMsgs)
+                            {
+                                <span class="alert alert-danger" role="alert">
+                                    @item
+                                </span>
+                            }
+                        </div>
+                    }
+                    <h2 class="pb-2 border-bottom">@Model.PageHeader </h2>
+                    <h6>Fill in the details below to add or edit a pet.</h6>
+
+                </div>
+
                 <div class="row g-3">
+                    <!-- Hidden fields used to bind input model -->
+                    <input asp-for="FriendInput.FriendId" type="hidden" />
+                    <input asp-for="FriendInput.StatusIM" type="hidden" />
+                    <input asp-for="FriendInput.NewPet.PetId" type="hidden" />
+                    <input asp-for="FriendInput.NewPet.StatusIM" type="hidden" />
+
+
+                    <input type="hidden" name="petId" data-seido-selected-item-id-target />
                     <div class="col-sm-6">
                         <label for="petName" class="form-label">Name</label>
-                        <input type="text" class="form-control is-invalid" id="petName" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="petName" asp-for="FriendInput.NewPet.PetId">
+                        <span asp-validation-for="FriendInput.NewPet.PetId" class="invalid-feedback"></span>
+
+                        @* <input type="text" class="form-control is-invalid" id="petName" placeholder="" value="" required>
                         <div class="invalid-feedback">
                             The pet must have a name
-                        </div>
+                        </div> *@
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="petType" class="form-label">Type of animal</label>
+
+                        <select asp-for="KindList" asp-items="@Model.KindList" class="form-control" id="petType">
+                            <option value="">Pick animal type</option>
+                        </select>
+                        <span asp-validation-for="KindList" class="invalid-feedback"></span>
                     </div>
 
                     <div class="col-sm-6">
                         <label for="petType" class="form-label">Type of animal</label>
                         <select class="form-select is-invalid" id="petType" required>
                             <option value="">Choose...</option>
-                            <option>Fish</option>
-                            <option>Dog</option>
+                            @foreach (var item in Model.KindList)
+                            {
+                                <option>@item.Value</option>
+                            }                           
                         </select>
                         <div class="invalid-feedback">
                             Select an animal type
@@ -46,13 +87,20 @@
                         <label for="petMood" class="form-label">Mood of the pet</label>
                         <select class="form-select is-invalid" id="petMood" required>
                             <option value="">Choose...</option>
-                            <option>Happy</option>
-                            <option>Sleepy</option>
+                            @foreach (var item in Model.MoodList)
+                            {
+                                <option>@item.Value</option>
+                            }
                         </select>
                         <div class="invalid-feedback">
                             Select the mood of the pet
                         </div>
                     </div>
+                </div>
+
+                <div class="col-12 d-flex justify-content-center me-5 mt-5">
+                    <button class="btn btn-success mx-2 mt-3 btn-lg h6" type="submit" asp-page-handler="Save">Save</button>
+                    <button class="btn btn-light mx-2 mt-3 btn-lg h6" type="submit" asp-page-handler="Undo">Cancel</button>
                 </div>
 
                 <button class="w-100 btn btn-primary btn-lg my-4" type="submit">Save</button>
