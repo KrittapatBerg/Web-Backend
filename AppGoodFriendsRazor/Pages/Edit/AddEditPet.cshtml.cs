@@ -1,4 +1,3 @@
-using AppStudies.SeidoHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -44,8 +43,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
         public IEnumerable<string> ValidationErrorMsgs { get; set; }
         public IEnumerable<KeyValuePair<string, ModelStateEntry>> InvalidKeys { get; set; }
 
-        //For Validation
-        public reModelValidationResult ValidationResult { get; set; } = new reModelValidationResult(false, null, null);
+        ////For Validation
+        //public reModelValidationResult ValidationResult { get; set; } = new reModelValidationResult(false, null, null);
 
         //public List<SelectListItem> KindList { get; set; } = null;
         //public List<SelectListItem> MoodList { get; set; } = new List<SelectListItem>().PopulateSelectList<enAnimalMood>();
@@ -66,13 +65,13 @@ namespace AppGoodFriendsRazor.Pages.Edit
                     PetIM.StatusIM = enStatusIM.Inserted;
                     PetIM.FriendId = friendId;
 
-                    PageHeader = "Create a new Friends";
+                    PageHeader = "Create a new pet";
 
                     return Page();
                 }
 
                 PetIM = new csPetIM(await service.ReadPetAsync(usr, Id, false));
-                PageHeader = "Edit details of a Friends";
+                PageHeader = "Edit details of a pet";
             }
             catch (Exception e)
             {
@@ -105,7 +104,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
 
             PageHeader = "Pet has been saved";
-            return RedirectToPage("FriendDetail", new { id = p.Friend.FriendId });
+            //return RedirectToPage("FriendDetail", new { id = p.Friend.FriendId });
+            return Redirect($"~/Friend/FriendDetail?id={p.Friend.FriendId}");
         }
         #endregion
 
@@ -124,7 +124,9 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 throw new Exception("Failed to create new pet.");
 
             //return Page();
-            return RedirectToPage("FriendDetail", new { id = newPet.Friend.FriendId });
+            //return RedirectToPage("FriendDetail", new { id = newPet.Friend.FriendId });
+            return Redirect($"~/Friend/FriendDetail?id={newPet.Friend.FriendId}");
+
         }
         #endregion
 

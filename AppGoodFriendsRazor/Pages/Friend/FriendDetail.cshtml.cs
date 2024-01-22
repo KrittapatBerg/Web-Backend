@@ -12,30 +12,47 @@ namespace AppGoodFriendsRazor.Pages.Friend
         readonly ILogger<FriendDetailModel> logger;
         loginUserSessionDto usr;
 
-        public List<IFriend> FriendDetail { get; set; } = new List<IFriend>();
+        public string ErrorMessage { get; set; } = null;
+        public IFriend FriendDetail { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
-            if (Guid.TryParse(Request.Query["id"], out Guid id))
+            try
             {
-                //Read a friend
-                var detail = await service.ReadFriendAsync(usr, id, false);
-
-                if (detail != null)
+                //Read a QueryParameter
+                var idQuery = Request.Query["id"];
+                if (string.IsNullOrEmpty(idQuery))
                 {
-                    // Add the friend to the list
-                    FriendDetail.Add(detail);
+                    ErrorMessage = "ID query parameter is missing.";
+                    return Page();
                 }
-                else
+
+                Guid _id = Guid.Parse(idQuery);
+
+                //Use the Service
+                FriendDetail = await service.ReadFriendAsync(usr, _id, false);
+                if (FriendDetail == null)
                 {
-                    // Handle the case where the friend is not found
-                    ModelState.AddModelError(string.Empty, "Friend not found.");
+                    ErrorMessage = "No friend found with the provided ID.";
+                    return Page();
                 }
             }
-            else
+            catch (Exception e)
             {
-                ModelState.AddModelError(string.Empty, "Whoops, friend does not exist.");
+                ErrorMessage = e.Message;
             }
             return Page();
+            //if (Guid.TryParse(Request.Query["id"], out Guid id))
+            //{
+            //    //Read a friend
+            //    FriendDetail = await service.ReadFriendAsync(usr, id, false)
+            //        ?? throw new Exception("Friend not found.");
+            //}
+            //else
+            //{
+            //    ModelState.AddModelError(string.Empty, "Whoops, friend does not exist.");
+            //}
+            //return Page();
         }
 
         #region Constructor and inject service

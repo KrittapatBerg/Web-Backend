@@ -14,123 +14,173 @@
 
 <div class="container px-4 py-4" id="view-friend">
     <h2 class="pb-2 border-bottom"> Details of a friend</h2>
-    @foreach (var friend in Model.FriendDetail)
-    {
-        <h6>Below you find all the details of <b>@friend.FirstName </b> </h6>
+
+    @{ var friend = Model.FriendDetail; }
+
+    <h6>Below you find all the details of <b>@friend.FirstName </b> </h6>
         
-        <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
-            <div class="col-md-7 col-lg-8">
-                <form class="needs-validation" novalidate>
-                    <div class="row g-3">
-                        <div class="col-sm-6">
-                            <label for="firstName" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="firstName" value="@friend.FirstName" readonly required>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <label for="lastName" class="form-label">Last name</label>
-                            <input type="text" class="form-control" id="lastName" value="@friend.LastName" readonly required>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="email" value="@friend.Email" readonly>
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="birthday" class="form-label">Birthday</label>
-                            <input type="text" class="form-control" id="birthday"
-                                   value="@(friend.Birthday.HasValue ? friend.Birthday.Value.ToString("yyyy-MM-dd") : "N/A")" readonly>
-                        </div>
-
-                        <div class="row g-3 visible">
-                            @if (friend.Address != null)
-                            {
-                                <div class="col-12">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input class="form-control" id="address" value="@friend.Address.StreetAddress" readonly required>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label for="zip" class="form-label">Zip</label>
-                                    <input type="text" class="form-control" id="zip" value="@friend.Address.ZipCode" readonly required>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="city" class="form-label">City</label>
-                                    <input type="text" class="form-control" id="city" value="@friend.Address.City" readonly required>
-                                </div>
-
-                                <div class="col-md-5">
-                                    <label for="country" class="form-label">Country</label>
-                                    <input type="text" class="form-control" id="country" value="@friend.Address.Country" readonly required>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col-12">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="address" value="N/A" readonly required>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                    <a href="~/Edit/EditFriendDetail?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Edit @friend.FirstName </a>
-
-                </form>
-            </div> 
-        </div>
-
+    <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
         <div class="col-md-7 col-lg-8">
-            <div class="form-group">
-                <h3 class="pb-2">@friend.FirstName's pets </h3>
+            <form class="needs-validation" novalidate>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">First name</label>
+                        <input type="text" class="form-control" id="firstName" value="@friend.FirstName" readonly required>
+                    </div>
 
-                @if (friend.Pets != null && friend.Pets.Any())
-                {
-                    <div class="row mb-2 text-center ">
-                        @foreach (var pet in friend.Pets)
+                    <div class="col-sm-6">
+                        <label for="lastName" class="form-label">Last name</label>
+                        <input type="text" class="form-control" id="lastName" value="@friend.LastName" readonly required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="email" value="@friend.Email" readonly>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="birthday" class="form-label">Birthday</label>
+                        <input type="text" class="form-control" id="birthday"
+                                value="@(friend.Birthday.HasValue ? friend.Birthday.Value.ToString("yyyy-MM-dd") : "N/A")" readonly>
+                    </div>
+
+                    <div class="row g-3 visible">
+                        @if (friend.Address != null)
                         {
-                            <div class="col-md-10 themed-grid-col "> 
-                                <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind</span>
-                                <a href="~/Edit/AddEditPet?id=@pet.PetId" class="w-100 btn btn-primary btn-lg my-4">Edit @pet.Name </a>
+                            <div class="col-12">
+                                <label for="address" class="form-label">Address</label>
+                                <input class="form-control" id="address" value="@friend.Address.StreetAddress" readonly required>
+                            </div>
 
+                            <div class="col-md-3">
+                                <label for="zip" class="form-label">Zip</label>
+                                <input type="text" class="form-control" id="zip" value="@friend.Address.ZipCode" readonly required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" value="@friend.Address.City" readonly required>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label for="country" class="form-label">Country</label>
+                                <input type="text" class="form-control" id="country" value="@friend.Address.Country" readonly required>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-12">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" value="N/A" readonly required>
                             </div>
                         }
                     </div>
-                }
-                else
-                {
-                    <div class="form-control col-md-10 themed-grid-col"> Has no pets</div>
-                }
-            </div>
-            <a href="~/Edit/AddEditPet?id=@Model.Friend.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Add pet </a>
+                </div>
+                <a href="~/Edit/EditFriendDetail?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Edit @friend.FirstName </a>
 
+            </form>
+        </div> 
+    </div>
+    
+   
+    <div class="col-md-7 col-lg-8">
+        <div class="form-group">
+            <h3 class="pb-2">@friend.FirstName's pets </h3>
+
+            @if (friend.Pets != null && friend.Pets.Any())
+            {
+                <div class="row mb-2 text-center ">
+                    @foreach (var pet in friend.Pets)
+                    {
+                        <div class="col-md-10 themed-grid-col "> 
+                            <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind</span>
+                            <a href="~/Edit/AddEditPet?id=@pet.PetId" class="w-100 btn btn-primary btn-lg my-4">Edit @pet.Name </a>
+
+                            <a href="~/Edit/AddEditPet?id=@Model.FriendDetail.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Add pet </a>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="form-control col-md-10 themed-grid-col"> Has no pets</div>
+            }
         </div>
 
-        <div class="col-md-7 col-lg-8">
-            <div class="form-group">
-                <h3 class="pb-2">@friend.FirstName's favorite quotes </h3> 
-                @if (friend.Quotes != null && friend.Quotes.Any())
-                {
-                    <div class="row mb-2 text-center">
-                        @foreach (var quote in @friend.Quotes)
-                        {
-                            <div class="col-md-10 themed-grid-col">
-                                <span class="form-control"> @quote.Quote 
-                                    <div class="col-md-16 text-end" style="font-weight: bold;">@quote.Author</div>
-                                </span>
-                            </div>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <div class="form-control col-md-10 themed-grid-col"> Has no favorite quotes</div>
-                }
+    </div>
+   
+
+ @*
+    <!-- Pets Section -->
+    <div class="col-md-7 col-lg-8">
+        <div class="form-group">
+            <h3 class="pb-2">@friend.FirstName's pets </h3>
+
+        @foreach (var pet in Model.FriendDetail.Pets)
+        {
+            <div class="row mb-2 text-center">
+                <div class="col-md-10 themed-grid-col">@pet.Name the @pet.Mood @pet.Kind</div>
+                <div class="col-md-2 themed-grid-col">
+                        <a href="/Edit/AddEditPet?id=@pet.PetId" class="btn btn-secondary btn-sm">Edit</a>
+                </div>
             </div>
-            <a href="~/Edit/AddEditQuote?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Edit @friend.FirstName's quote </a>
+        }
+        <a href="/Edit/AddEditPet?friendId=@Model.FriendDetail.FriendId" class="btn btn-success btn-sm mt-2">Add Pet</a>
+    </div> *@
 
-        </div>
 
-        <a href="~/Edit/AddEditFriend?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4">Edit @friend.FirstName 's details</a>
+    <!-- Quotes Section -->
+    <div class="col-md-7 col-lg-8">
+        <h3 class="pb-2">Favorite Quotes</h3>
+        @foreach (var quote in Model.FriendDetail.Quotes)
+        {
+            <div class="row mb-2 text-center">
+                <div class="col-md-10 themed-grid-col">
+                    @quote.Quote
+                    <div class="text-end">@quote.Author</div>
+                    <a href="/Edit/AddEditQuote?quoteId=@quote.QuoteId&amp;friendId=@Model.FriendDetail.FriendId" class="btn btn-primary btn-sm" role="button">Edit Quote</a>
+                </div>
+
+            </div>
+        }
+        <a href="/Edit/AddEditQuote?friendId=@Model.FriendDetail.FriendId" class="btn btn-success btn-sm mt-2">Add Quote</a>
+    </div>
+
     }
+    else
+    {
+<div>No friend details available.</div>
+    }
+</div>
+
+
+
+    @*
+    <div class="col-md-7 col-lg-8">
+        <div class="form-group">
+            <h3 class="pb-2">@friend.FirstName's favorite quotes </h3> 
+            @if (friend.Quotes != null && friend.Quotes.Any())
+            {
+                <div class="row mb-2 text-center">
+                    @foreach (var quote in @friend.Quotes)
+                    {
+                        <div class="col-md-10 themed-grid-col">
+                            <span class="form-control"> @quote.Quote 
+                                <div class="col-md-16 text-end" style="font-weight: bold;">@quote.Author</div>
+                            </span>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="form-control col-md-10 themed-grid-col"> Has no favorite quotes</div>
+            }
+        </div>
+        <a href="~/Edit/AddEditQuote?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Edit @friend.FirstName's quote </a>
+
+    </div>
+
+    <a href="~/Edit/AddEditFriend?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4">Edit @friend.FirstName 's details</a>
+    *@
+
 </div>
