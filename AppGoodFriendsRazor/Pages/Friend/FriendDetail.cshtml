@@ -80,107 +80,48 @@
             </form>
         </div> 
     </div>
-    
-   
+ 
+    <!-- Pet starts here -->
     <div class="col-md-7 col-lg-8">
         <div class="form-group">
             <h3 class="pb-2">@friend.FirstName's pets </h3>
-
-            @if (friend.Pets != null && friend.Pets.Any())
-            {
-                <div class="row mb-2 text-center ">
-                    @foreach (var pet in friend.Pets)
-                    {
-                        <div class="col-md-10 themed-grid-col "> 
-                            <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind</span>
-                            <a href="~/Edit/AddEditPet?id=@pet.PetId" class="w-100 btn btn-primary btn-lg my-4">Edit @pet.Name </a>
-
-                            <a href="~/Edit/AddEditPet?id=@Model.FriendDetail.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Add pet </a>
-                        </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <div class="form-control col-md-10 themed-grid-col"> Has no pets</div>
-            }
-        </div>
-
-    </div>
-   
-
- @*
-    <!-- Pets Section -->
-    <div class="col-md-7 col-lg-8">
-        <div class="form-group">
-            <h3 class="pb-2">@friend.FirstName's pets </h3>
-
-        @foreach (var pet in Model.FriendDetail.Pets)
-        {
-            <div class="row mb-2 text-center">
-                <div class="col-md-10 themed-grid-col">@pet.Name the @pet.Mood @pet.Kind</div>
-                <div class="col-md-2 themed-grid-col">
-                        <a href="/Edit/AddEditPet?id=@pet.PetId" class="btn btn-secondary btn-sm">Edit</a>
-                </div>
-            </div>
-        }
-        <a href="/Edit/AddEditPet?friendId=@Model.FriendDetail.FriendId" class="btn btn-success btn-sm mt-2">Add Pet</a>
-    </div> *@
-
-
-    <!-- Quotes Section -->
-    <div class="col-md-7 col-lg-8">
-        <h3 class="pb-2">Favorite Quotes</h3>
-        @foreach (var quote in Model.FriendDetail.Quotes)
-        {
-            <div class="row mb-2 text-center">
-                <div class="col-md-10 themed-grid-col">
-                    @quote.Quote
-                    <div class="text-end">@quote.Author</div>
-                    <a href="/Edit/AddEditQuote?quoteId=@quote.QuoteId&amp;friendId=@Model.FriendDetail.FriendId" class="btn btn-primary btn-sm" role="button">Edit Quote</a>
-                </div>
-
-            </div>
-        }
-        <a href="/Edit/AddEditQuote?friendId=@Model.FriendDetail.FriendId" class="btn btn-success btn-sm mt-2">Add Quote</a>
-    </div>
-
-    }
-    else
-    {
-<div>No friend details available.</div>
-    }
-</div>
-
-
-
-    @*
-    <div class="col-md-7 col-lg-8">
-        <div class="form-group">
-            <h3 class="pb-2">@friend.FirstName's favorite quotes </h3> 
-            @if (friend.Quotes != null && friend.Quotes.Any())
+           
+            @foreach (var pet in Model.FriendDetail.Pets)
             {
                 <div class="row mb-2 text-center">
-                    @foreach (var quote in @friend.Quotes)
-                    {
-                        <div class="col-md-10 themed-grid-col">
-                            <span class="form-control"> @quote.Quote 
-                                <div class="col-md-16 text-end" style="font-weight: bold;">@quote.Author</div>
-                            </span>
+                    <span class="form-control">@pet.Name the @pet.Mood @pet.Kind
+                        <div class="col-md-2 themed-grid-col">
+                            <a href="/Edit/AddEditPet?id=@pet.PetId" class="w-100 btn btn-primary">Edit @pet.Name</a>
                         </div>
-                    }
+                    </span>
                 </div>
             }
-            else
-            {
-                <div class="form-control col-md-10 themed-grid-col"> Has no favorite quotes</div>
-            }
+        
+            <a href="/Edit/AddEditPet?friendId=@Model.FriendDetail.FriendId" class="w-100 btn btn-primary">Add Pet</a>
         </div>
-        <a href="~/Edit/AddEditQuote?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Edit @friend.FirstName's quote </a>
+    </div> 
 
+
+    <!-- Quote starts here -->
+    <div class="col-md-7 col-lg-8">
+        <div class="form-group">
+            <h3 class="pb-2">@friend.FirstName Favorite Quotes</h3>
+
+            @foreach (var quote in Model.FriendDetail.Quotes)
+            {
+                <div class="row mb-2 text-center">
+                    <span class="form-control">
+                        <div class="col-md-10 themed-grid-col">
+                            @quote.Quote
+                            <div class="text-end" style="font-weight: bold;">@quote.Author</div>
+                            <a href="/Edit/AddEditQuote?quoteId=@quote.QuoteId&amp;friendId=@Model.FriendDetail.FriendId" class="btn btn-primary btn-sm" role="button">Edit Quote</a>
+                        </div>
+                    </span>
+
+                </div>
+            }
+            <a href="/Edit/AddEditQuote?friendId=@Model.FriendDetail.FriendId" class="w-100 btn btn-primary">Add Quote</a>
+        </div>
     </div>
-
-    <a href="~/Edit/AddEditFriend?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4">Edit @friend.FirstName 's details</a>
-    *@
 
 </div>

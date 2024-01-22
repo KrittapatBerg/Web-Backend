@@ -13,16 +13,10 @@
     </svg>
 </a>
 
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add/Edit Quotes</title>
-    <link rel="stylesheet" href="~/css/styles.css" />
-</head>
-<body>
+<div class="container px-4 py-4" id="add-edit-quotes">
     <div class="container">
         <h2>@Model.PageHeader</h2>
+        <p> You can add or edit Quotes of a friend here </p>
 
         <div asp-validation-summary="All" class="text-danger"></div>
         <form method="post">
@@ -56,12 +50,4 @@
             }
         </form>
     </div>
-</body>
-</html>
-<div class="container px-4 py-4" id="add-edit-quotes">
-    <h2 class="pb-2 border-bottom">Add and Edit Quotes of a Friend</h2>
-    <p> You can add or edit Quotes of a friend here </p>
-    
-   
-  
 </div>

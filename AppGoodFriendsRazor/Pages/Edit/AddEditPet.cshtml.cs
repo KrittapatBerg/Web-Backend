@@ -9,10 +9,10 @@ using static AppGoodFriendsRazor.Pages.Edit.EditFriendDetailModel;
 
 namespace AppGoodFriendsRazor.Pages.Edit
 {
-    public class EditPetModel : PageModel
+    public class AddEditPetModel : PageModel
     {
         IFriendsService service;
-        ILogger<EditPetModel> logger;
+        ILogger<AddEditPetModel> logger;
         loginUserSessionDto usr;
 
         [BindProperty]
@@ -46,8 +46,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
         ////For Validation
         //public reModelValidationResult ValidationResult { get; set; } = new reModelValidationResult(false, null, null);
 
-        //public List<SelectListItem> KindList { get; set; } = null;
-        //public List<SelectListItem> MoodList { get; set; } = new List<SelectListItem>().PopulateSelectList<enAnimalMood>();
 
 
         #region HTTP request
@@ -104,7 +102,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
 
             PageHeader = "Pet has been saved";
-            //return RedirectToPage("FriendDetail", new { id = p.Friend.FriendId });
             return Redirect($"~/Friend/FriendDetail?id={p.Friend.FriendId}");
         }
         #endregion
@@ -121,10 +118,9 @@ namespace AppGoodFriendsRazor.Pages.Edit
             });
 
             if (newPet is null)
-                throw new Exception("Failed to create new pet.");
+                throw new Exception("Failed to create a new pet.");
 
-            //return Page();
-            //return RedirectToPage("FriendDetail", new { id = newPet.Friend.FriendId });
+
             return Redirect($"~/Friend/FriendDetail?id={newPet.Friend.FriendId}");
 
         }
@@ -134,7 +130,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
 
         #region Constructor
-        public EditPetModel(IFriendsService service, ILogger<EditPetModel> logger)
+        public AddEditPetModel(IFriendsService service, ILogger<AddEditPetModel> logger)
         {
             this.service = service;
             this.logger = logger;

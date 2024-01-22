@@ -1,5 +1,5 @@
 ﻿@page
-@model AppGoodFriendsRazor.Pages.Edit.EditPetModel
+@model AppGoodFriendsRazor.Pages.Edit.AddEditPetModel
 @{
     ViewData["Title"] = Model.PageHeader ?? "Add and edit pets of a Friend";
 }
@@ -13,85 +13,103 @@
     </svg>
 </a>
 
-@*
-<div class="container px-4 py-4" id="add-edit-pet">
-    <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
-        <div class="col-md-7 col-lg-8">
-            <form class="needs-validation" novalidate>
-                <div class="col-md-7 col-lg-10 ">
-                    <!--To keep between Posts -->
-                    <input asp-for="PageHeader" value="@Model.PageHeader" type="hidden" />
+@* <div class="container px-4 py-4" id="add-edit-pet">
+    <h2 class="pb-2 border-bottom">My friend's pets</h2>
 
-                    <!-- Server side validation errors, rough but just in case client side validation is not working or tampered with -->
-                    @if (Model.ValidationResult.HasErrors)
-                    {
-                        <div class="row g-3">
-                            @foreach (var item in Model.ValidationResult.ErrorMsgs)
-                            {
-                                <span class="alert alert-danger" role="alert">
-                                    @item
-                                </span>
-                            }
-                        </div>
-                    }
-                    <h2 class="pb-2 border-bottom">@Model.PageHeader </h2>
-                    <h6>Fill in the details below to add or edit a pet.</h6>
+    <p>Below are some pets of Friend. Click and choose pet's Kind and Mood.</p>
+    <form class="needs-validation" method="post" novalidate>
+        <input name="PetId" value="@Model.PetIM.PetId" type="hidden" />
 
-                </div>
+        <h4>Edit @Model.PetIM.Name</h4>
+        <div class="row mb-2 text-center">
+            <div class="col-md-12 themed-grid-col">
+                <label for="name" class="form-label">Pet name</label>
+                <input asp-for="@Model.PetIM.Name" asp-items="@Model.PetIM.Name" class="form-control" id="name"/>
+            </div>
+        </div>
+       
+        <div class="row mb-2 text-center">
+            <div class="col-md-12 themed-grid-col">
+                <label for="kind" class="form-label">Select Kind</label>
+                <select asp-for="SelectedKind" asp-items="Html.GetEnumSelectList<Models.enAnimalKind>()" class="form-control" id="kind">
+                </select>
+            </div>
+        </div>
 
-                <div class="row g-3">
-                    <input name="PetId" value="@Model.PetIM.PetId" type="hidden"/>
-                        <input type="text" class="form-control is-invalid" id="petName" placeholder="" value="" required>
-                            <div class="invalid-feedback">
-                                The pet must have a name
-                            </div>
-                 
-                    <div class="col-sm-6">
-                        <label for="petType" class="form-label">Type of animal</label>
+        <div class="row mb-2 text-center">
+            <div class="col-md-12 themed-grid-col">
+                <label for="mood" class="form-label">Select Mood</label>
+                <select asp-for="SelectedMood" asp-items="Html.GetEnumSelectList<Models.enAnimalMood>()" class="form-control" id="mood">
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-success mx-2 mt-3 btn-lg h6" type="submit" asp-page-handler="Save">Save</button>
 
-                        <select asp-for="SelectedKind" asp-items="@Html.GetEnumSelectList<Models.enAnimalKind>()" class="form-control" id="petType">
-                            <option value="">Pick animal type</option>
-                        </select>
-                        <span asp-validation-for="SelectedKind" class="invalid-feedback"></span>
-                    </div>
+        <h4>Add Pet Here</h4>
+        <div class="row mb-2 text-center">
+            <div class="col-md-12 themed-grid-col">
+                <label for="newName" class="form-label"> Name</label>
+                <input type="text" id="newName" class="form-control" asp-for="PetIM.Name" required />
+                <div class="invalid-feedback">Pet needs a name </div>
+            </div>
+        </div>
 
-                    <div class="col-sm-6">
-                        
-                        <label for="petType" class="form-label">Mood of animal</label>
+        <div class="row mb-2 text-center">
+            <div class="col-md-12 themed-grid-col">
+                <label for="newKind" class="form-label">Choose kind of pet</label>
+                <select id="newKind" class="form-control" asp-for="PetIM.Kind" asp-items="Html.GetEnumSelectList<Models.enAnimalKind>()" required>
+                    <option value="">Pick animal kind</option>
+                </select>
+                <div class="invalid-feedback">Pet needs a kind</div>
+            </div>
+        </div>
 
-                        <select asp-for="SelectedMood" asp-items="@Html.GetEnumSelectList<Models.enAnimalMood>()" class="form-control" id="petType">
-                            <option value="">Pick animal type</option>
-                        </select>
-                        <span asp-validation-for="SelectedMood" class="invalid-feedback"></span>
-                       
-                    </div>
+        <div class="row mb-2 text-center">
+            <div class="col-md-12 themed-grid-col">
+                <label for="newMood" class="form-label">Choose Mood of pet</label>
+                <select id="newMood" class="form-control" asp-for="PetIM.Mood" asp-items="Html.GetEnumSelectList<Models.enAnimalMood>()" required>
+                    <option value="">Pick animal mood</option>
+                </select>
+                <div class="invalid-feedback">Pet needs a kind</div>
+            </div>
+        </div>
 
-                    <div class="col-12 d-flex justify-content-center me-5 mt-5">
-                        <button class="btn btn-success mx-2 mt-3 btn-lg h6" type="submit" asp-page-handler="Save">Save</button>
-                        <button class="btn btn-light mx-2 mt-3 btn-lg h6" type="submit" asp-page-handler="Undo">Cancel</button>
-                    </div>
-                </div>
+        <input type="hidden" asp-for="PetIM.FriendId" />
+        <button class="w-100 btn btn-success btn-lg my-4" type="submit" asp-page-handler="AddPet">Add Pet</button>
+    </form>
 
-               
-
-               
-                   
-                
-            </form>
-
-
+    <div class="row mb-2 text-center">
+        <div class="col-md-10 themed-grid-head-col">
+            Selected items
+        </div>
     </div>
-</div>
-*@
-
+    @if (Model.SelectedKind != null)
+    {
+        <div class="row mb-2 text-center">
+            <div class="col-md-10 themed-grid-col">
+                @Model.SelectedKind
+            </div>
+        </div>
+    }
+    @if (Model.SelectedMood != null)
+    {
+        <div class="row mb-2 text-center">
+            <div class="col-md-10 themed-grid-col">
+                @Model.SelectedMood.ToString()
+            </div>
+        </div>
+    }
+</div> *@
 
 
 <div class="container px-4 py-4" id="pets-of-friends">
     <h2 class="pb-2 border-bottom">My friend's pets</h2>
 
-    <p>Below are some pets of Friends. Select To Edit the Kind and Mood.</p>
+    <p>Select To Edit the Kind and Mood.</p>
     <form class="needs-validation" method="post" novalidate>
         <input name="PetId" value="@Model.PetIM.PetId" type="hidden" />
+
+        <h6>Edit @Model.PetIM.Name </h6>
         <div class="row mb-2 text-center">
             <div class="col-md-12 themed-grid-col">
                 <label for="animals" class="form-label">Select Kind</label>
@@ -106,8 +124,9 @@
                 </select>
             </div>
         </div>
-        <button class="btn btn-success mx-2 mt-3 btn-lg h6" type="submit" asp-page-handler="Save">Save</button>
+        <button class="w-100 btn btn-primary btn-lg my-4" type="submit" asp-page-handler="Save">Save</button>
 
+        <h6>Add new pet here </h6>
         <div class="row mb-2 text-center">
             <div class="col-md-12 themed-grid-col">
                 <label for="newPetName" class="form-label">New Pet Name</label>
@@ -139,11 +158,7 @@
         <button class="w-100 btn btn-success btn-lg my-4" type="submit" asp-page-handler="AddPet">Add Pet</button>
     </form>
 
-    <div class="row mb-2 text-center">
-        <div class="col-md-10 themed-grid-head-col">
-            Selected items
-        </div>
-    </div>
+    
     @if (Model.SelectedKind != null)
     {
         <div class="row mb-2 text-center">
@@ -161,4 +176,3 @@
         </div>
     }
 </div>
-

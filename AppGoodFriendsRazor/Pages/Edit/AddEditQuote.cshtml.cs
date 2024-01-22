@@ -10,9 +10,9 @@ namespace AppGoodFriendsRazor.Pages.Edit
 {
     public class EditQuoteModel : PageModel
     {
-        private readonly IFriendsService _service;
-        private readonly ILogger<EditQuoteModel> _logger;
-        private readonly loginUserSessionDto _usr;
+        IFriendsService service;
+        ILogger<EditQuoteModel> logger;
+        loginUserSessionDto usr;
 
         [BindProperty]
         public Guid FriendId { get; set; }
@@ -27,13 +27,14 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
         public List<IQuote> Quotes { get; set; } = new List<IQuote>();
 
-
-        // Constructor with dependency injection
+        #region Constructor 
+        // inject service
         public EditQuoteModel(IFriendsService service, ILogger<EditQuoteModel> logger)
         {
-            _service = service;
-            _logger = logger;
+            this.service = service;
+            this.logger = logger;
         }
+        #endregion
 
         //For Server Side Validation set by IsValid()
         public bool HasValidationErrors { get; set; }
@@ -47,8 +48,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
             if (quoteId == Guid.Empty)
                 return Page();
 
-            QuoteIM = new csQuoteIM(await _service.ReadQuoteAsync(null, quoteId, false));
-            PageHeader = "Edit details of a Friends";
+            QuoteIM = new csQuoteIM(await service.ReadQuoteAsync(null, quoteId, false));
+            PageHeader = "Edit details of quote";
 
             return Page();
 
@@ -56,7 +57,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
         public async Task<IActionResult> OnPostEdit()
         {
             // Load the existing quote
-            var Quote = await _service.ReadQuoteAsync(null, QuoteIM.QuoteId, false);
+            var Quote = await service.ReadQuoteAsync(null, QuoteIM.QuoteId, false);
 
             if (Quote == null)
             {
@@ -71,16 +72,16 @@ namespace AppGoodFriendsRazor.Pages.Edit
             // Save the changes to the database
             var updatedQuote = new csQuoteCUdto(Quote);
 
-            Quote = await _service.UpdateQuoteAsync(null, updatedQuote);
+            Quote = await service.UpdateQuoteAsync(null, updatedQuote);
 
             QuoteIM = new csQuoteIM(Quote);
 
             if (FriendId == Guid.Empty)
                 return RedirectToPage("FriendsInCountrys");
 
-            // Redirect to the "ViewFriendDetails" page
+            // Redirect to the "FriendDetail" page
             return Redirect($"~/Friend/FriendDetail?id={FriendId}");
-            //return RedirectToPage("FriendView", new { id = FriendId });
+
         }
 
         public async Task<IActionResult> OnPostSave()
@@ -89,7 +90,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             PageHeader = (QuoteIM.StatusIM == enStatusIM.Inserted) ?
                 "Create a new quote" : "Edit details of a quote";
 
-            IQuote createdQuote = await _service.CreateQuoteAsync(null, new csQuoteCUdto()
+            IQuote createdQuote = await service.CreateQuoteAsync(null, new csQuoteCUdto()
             {
                 Quote = QuoteIM.Quote,
                 Author = QuoteIM.Author
@@ -103,27 +104,25 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 return RedirectToPage("FriendsInCountrys");
 
 
-            csFriendCUdto friend = new(await _service.ReadFriendAsync(null, FriendId, false)
+            csFriendCUdto friend = new(await service.ReadFriendAsync(null, FriendId, false)
                 ?? throw new Exception("Incorrect friendId"));
 
             friend.QuotesId.Add(createdQuote.QuoteId);
 
-            friend = new(await _service.UpdateFriendAsync(null, friend)
+            friend = new(await service.UpdateFriendAsync(null, friend)
                 ?? throw new Exception("Failed to add new quote to friend."));
 
             // Redirect to the same page to refresh the list
-            //return RedirectToPage("FriendView", new { id = friend.FriendId });
+
             return Redirect($"~/Friend/FriendDetail?id={friend.FriendId}");
 
         }
 
-
+        #region input model
         public enum enStatusIM { Unknown, Unchanged, Inserted, Modified, Deleted }
 
         public class csQuoteIM
         {
-
-
             // Properties for Quote
             public enStatusIM StatusIM { get; set; } = enStatusIM.Unchanged;
             public Guid QuoteId { get; set; } = Guid.NewGuid();
@@ -173,7 +172,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
 
         }
-
+        #endregion
     }
 }
 
