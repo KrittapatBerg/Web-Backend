@@ -99,7 +99,7 @@
                     </div>
                 </div>
 
-                <!--Pets start here-->
+               @* <!--Pets start here-->
                 <div class="col-md-7 col-lg-8">
                     <input type="hidden" name="petId" data-seido-selected-item-id-target />
                     <div class="row">
@@ -167,6 +167,8 @@
                                     class="form-control" type="hidden" />
                             <input asp-for="FriendInput.Pets[k].PetId" value="@Model.FriendInput.Pets[k].PetId"
                                     class="form-control" type="hidden" />
+                            <input asp-for="AnimalToEditID" value="@Model.FriendInput.Pets[k].PetId"
+                                   class="form-control" type="hidden" />
                             <input asp-for="FriendInput.Pets[k].Name" value="@Model.FriendInput.Pets[k].Name"
                                     class="form-control" type="hidden" />
                             <input asp-for="FriendInput.Pets[k].Kind" value="@Model.FriendInput.Pets[k].Kind"
@@ -225,7 +227,6 @@
                         </div>
 
                     }
-
                 </div>
 
                 <!--Quote starts here-->
@@ -261,6 +262,60 @@
                     </div>
 
 
+                    @for (int k = 0; k < Model.FriendInput.Quotes.Count; k++)
+                    {
+                        <div class="row mb-2 text-center @(Model.FriendInput.Quotes[k].StatusIM == AppGoodFriendsRazor.Pages.Edit.EditFriendDetailModel.enStatusIM.Deleted?
+                            "d-none" : null)">
+                            <!-- Hidden fields so they are preserved by the Modelbinder -->
+                            <input asp-for="FriendInput.Quotes[k].StatusIM" value="@Model.FriendInput.Quotes[k].StatusIM"
+                                   class="form-control" type="hidden" />
+                            <input asp-for="FriendInput.Quotes[k].QuoteId" value="@Model.FriendInput.Quotes[k].QuoteId"
+                                   class="form-control" type="hidden" />
+                            <input asp-for="AnimalToEditID" value="@Model.FriendInput.Quotes[k].QuoteId"
+                                   class="form-control" type="hidden" />
+                            <input asp-for="FriendInput.Quotes[k].Quote" value="@Model.FriendInput.Quotes[k].Quote"
+                                   class="form-control" type="hidden" />
+                            <input asp-for="FriendInput.Quotes[k].Author" value="@Model.FriendInput.Quotes[k].Author"
+                                   class="form-control" type="hidden" />
+
+                            <div class="col-md-6 themed-grid-col">
+                                @Model.FriendInput.Quotes[k].Quote
+                            </div>
+                            <div class="col-md-2 themed-grid-col">
+                                @Model.FriendInput.Quotes[k].Author
+                            </div>
+                           
+                            <div class="col-md-2 themed-grid-col">
+                                <button class="btn btn-secondary btn-sm m-1" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseEditQuote_@Model.FriendInput.Quotes[k].QuoteId"
+                                        data-seido-selected-item-id="@Model.FriendInput.Quotes[k].QuoteId">
+                                    Edit
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="collapse row mb-2 text-center" id="collapseEditQuote_@Model.FriendInput.Quotes[k].QuoteId ">
+                            <div class="col-md-6 themed-grid-col">
+                                <input asp-for="FriendInput.Quotes[k].editQuote" class="form-control"
+                                       value="@Model.FriendInput.Quotes[k].editQuote" />
+                                <span asp-validation-for="FriendInput.Quotes[k].editQuote" class="invalid-feedback"></span>
+                            </div>
+                            <div class="col-md-6 themed-grid-col">
+                                <input asp-for="FriendInput.Quotes[k].editAuthor" class="form-control"
+                                       value="@Model.FriendInput.Quotes[k].editAuthor" />
+                                <span asp-validation-for="FriendInput.Quotes[k].editAuthor" class="invalid-feedback"></span>
+                            </div>
+
+                            <div class="col-md-2 themed-grid-col">
+                                <button type="submit" asp-page-handler="EditQuote" class="btn btn-success btn-sm m-1">
+                                    Ok
+                                </button>
+                            </div>
+                        </div>
+
+                    }
 
 
                     <div class="row mb-2 text-center">
@@ -272,13 +327,11 @@
                                     <div class="col-md-12 text-end"><b>@quote.Author </b></div>
                                 </span>
                             </div>
-                            <div class="col-md-2 themed-grid-col">
-                                <a href="#add-edit-pet" class="btn btn-secondary btn-sm" type="button">Edit</a>
-                            </div>
+                            
                         }
                     </div>
 
-                </div>
+                </div> *@
 
                 
 

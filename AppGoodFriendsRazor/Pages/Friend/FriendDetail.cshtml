@@ -91,6 +91,8 @@
                         {
                             <div class="col-md-10 themed-grid-col "> 
                                 <span class="form-control"> @pet.Name the @pet.Mood @pet.Kind</span>
+                                <a href="~/Edit/AddEditPet?id=@pet.PetId" class="w-100 btn btn-primary btn-lg my-4">Edit @pet.Name </a>
+
                             </div>
                         }
                     </div>
@@ -100,7 +102,7 @@
                     <div class="form-control col-md-10 themed-grid-col"> Has no pets</div>
                 }
             </div>
-            <a href="~/Edit/AddEditPet?id=@friend.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Edit @friend.FirstName's pet </a>
+            <a href="~/Edit/AddEditPet?id=@Model.Friend.FriendId" class="w-100 btn btn-primary btn-lg my-4" type="button">Add pet </a>
 
         </div>
 

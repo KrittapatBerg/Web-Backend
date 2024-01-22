@@ -21,6 +21,10 @@ namespace AppGoodFriendsRazor.Pages.Edit
         [BindProperty]
         public string PageHeader { get; set; }
 
+
+        [BindProperty]
+        public Guid AnimalToEditID { get; set; }
+
         //For enum Pet
         public List<SelectListItem> Kind { get; set; } = new List<SelectListItem>().PopulateSelectList<enAnimalKind>();
         public List<SelectListItem> Mood { get; set; } = new List<SelectListItem>().PopulateSelectList<enAnimalMood>();
@@ -141,9 +145,10 @@ namespace AppGoodFriendsRazor.Pages.Edit
             return Redirect($"~/Friend/FriendDetail?id={FriendInput.FriendId}");
         }
 
-        public IActionResult OnPostEditPet(Guid petId)
+        public IActionResult OnPostEditPet()
         {
-            int idx = FriendInput.Pets.FindIndex(a => a.PetId == petId);
+
+            int idx = FriendInput.Pets.FindIndex(a => a.PetId == AnimalToEditID);
             string[] keys = { $"FriendInput.Pets[{idx}].editName",
                               $"FriendInput.Pets[{idx}].editKind",
                               $"FriendInput.Pets[{idx}].editMood"};
@@ -154,8 +159,11 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 return Page();
             }
 
+
+
+
             //Set the pets as Modified, it will later be updated in the database
-            var p = FriendInput.Pets.FirstOrDefault(a => a.PetId == petId);
+            var p = FriendInput.Pets.FirstOrDefault(a => a.PetId == AnimalToEditID);
 
             if (p == null)
             {
@@ -184,7 +192,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
             return Page();
         }
 
-        public IActionResult OnPostAddPet()
+        public async Task<IActionResult> OnPostAddPetAsync()
         {
             string[] keys = { "FriendInput.NewPet.Name",
                                "FriendInput.NewPet.Kind",
@@ -196,6 +204,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 return Page();
             }
 
+
+
             //Set the pet as Inserted, it will later be inserted in the database
             FriendInput.NewPet.StatusIM = enStatusIM.Inserted;
 
@@ -206,8 +216,21 @@ namespace AppGoodFriendsRazor.Pages.Edit
             //Add it to the Input Models pets
             FriendInput.Pets.Add(new csPetIM(FriendInput.NewPet));
 
+
+
             //Clear the NewPet so another pet can be added
             FriendInput.NewPet = new csPetIM();
+
+            csPetCUdto ny = new csPetCUdto
+            {
+                FriendId = FriendInput.FriendId,
+                Kind = FriendInput.NewPet.Kind,
+                Name = "test",
+                Mood = FriendInput.NewPet.Mood
+
+            };
+
+            var newF = await service.CreatePetAsync(usr, ny);
 
             return Redirect($"~/Friend/FriendDetail?id={FriendInput.FriendId}");
         }
