@@ -21,12 +21,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
         [BindProperty]
         public csPetIM PetIM { get; set; }
 
-        [BindProperty]
-        public enAnimalKind? SelectedKind { get; set; } = null;
-
-        [BindProperty]
-        public enAnimalMood? SelectedMood { get; set; } = null;
-
         public Guid FriendId { get; set; }
 
         public List<csPetIM> PetIMs { get; set; } = new List<csPetIM>();
@@ -93,12 +87,10 @@ namespace AppGoodFriendsRazor.Pages.Edit
             }
 
             var p = await service.ReadPetAsync(usr, petId, false);
-            p.Kind = SelectedKind ?? p.Kind; // Assuming Kind is the property in IPet representing the kind
-            p.Mood = SelectedMood ?? p.Mood;
+            p = PetIM.UpdateModel(p);
             var dto = new csPetCUdto(p);  //update
 
             p = await service.UpdatePetAsync(usr, dto);
-            PetIM = new csPetIM(p);
 
 
             PageHeader = "Pet has been saved";
@@ -169,7 +161,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
             public Guid FriendId { get; set; }
             public IPet UpdateModel(IPet model)
             {
-                model.PetId = PetId;
                 model.Kind = Kind;
                 model.Mood = Mood;
                 model.Name = Name;

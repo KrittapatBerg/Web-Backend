@@ -109,70 +109,40 @@
     <form class="needs-validation" method="post" novalidate>
         <input name="PetId" value="@Model.PetIM.PetId" type="hidden" />
 
-        <h6>Edit @Model.PetIM.Name </h6>
         <div class="row mb-2 text-center">
             <div class="col-md-12 themed-grid-col">
-                <label for="animals" class="form-label">Select Kind</label>
-                <select asp-for="SelectedKind" asp-items="Html.GetEnumSelectList<Models.enAnimalKind>()" class="form-control" id="animals">
-                </select>
-            </div>
-        </div>
-        <div class="row mb-2 text-center">
-            <div class="col-md-12 themed-grid-col">
-                <label for="animals" class="form-label">Select Mood</label>
-                <select asp-for="SelectedMood" asp-items="Html.GetEnumSelectList<Models.enAnimalMood>()" class="form-control" id="animals">
-                </select>
-            </div>
-        </div>
-        <button class="w-100 btn btn-primary btn-lg my-4" type="submit" asp-page-handler="Save">Save</button>
-
-        <h6>Add new pet here </h6>
-        <div class="row mb-2 text-center">
-            <div class="col-md-12 themed-grid-col">
-                <label for="newPetName" class="form-label">New Pet Name</label>
-                <input type="text" id="newPetName" class="form-control" asp-for="PetIM.Name" required />
-                <div class="invalid-feedback">Please enter a name for the new pet.</div>
+                <label for="PetIM.Name" class="form-label">Pet Name</label>
+                <input type="text" class="form-control" asp-for="PetIM.Name" required />
+                <span asp-validation-for="PetIM.Name" class="invalid-feedback">Please enter a name for the new pet.</span>
             </div>
         </div>
 
         <div class="row mb-2 text-center">
             <div class="col-md-12 themed-grid-col">
-                <label for="newPetKind" class="form-label">New Pet Kind</label>
-                <select id="newPetKind" class="form-control" asp-for="PetIM.Kind" asp-items="Html.GetEnumSelectList<Models.enAnimalKind>()" required>
+                <label for="PetIM.Kind" class="form-label">Pet Kind</label>
+                <select class="form-control" asp-for="PetIM.Kind" asp-items="Html.GetEnumSelectList<Models.enAnimalKind>()" required>
                     <option value="">Pick one</option>
                 </select>
-                <div class="invalid-feedback">Please select a kind for the new pet.</div>
+                <span asp-validation-for="PetIM.Kind" class="invalid-feedback">Please select a kind for the new pet.</span>
             </div>
         </div>
 
         <div class="row mb-2 text-center">
             <div class="col-md-12 themed-grid-col">
-                <label for="newPetMood" class="form-label">New Pet Mood</label>
-                <select id="newPetMood" class="form-control" asp-for="PetIM.Mood" asp-items="Html.GetEnumSelectList<Models.enAnimalMood>()" required>
+                <label for="PetIM.Mood" class="form-label">Pet Mood</label>
+                <select class="form-control" asp-for="PetIM.Mood" asp-items="Html.GetEnumSelectList<Models.enAnimalMood>()" required>
                     <option value="">Pick one</option>
                 </select>
-                <div class="invalid-feedback">Please select a mood for the new pet.</div>
+                <span asp-validation-for="PetIM.Mood" class="invalid-feedback">Please select a mood for the new pet.</span>
             </div>
         </div>
         <input type="hidden" asp-for="PetIM.FriendId" />
-        <button class="w-100 btn btn-success btn-lg my-4" type="submit" asp-page-handler="AddPet">Add Pet</button>
+        @if (Model.PetIM.PetId == Guid.Empty)
+        {
+            <button class="w-100 btn btn-success btn-lg my-4" type="submit" asp-page-handler="AddPet">Add Pet</button>
+        }
+        else {
+        <button class="w-100 btn btn-primary btn-lg my-4" type="submit" asp-page-handler="Save">Save</button>
+        }
     </form>
-
-    
-    @if (Model.SelectedKind != null)
-    {
-        <div class="row mb-2 text-center">
-            <div class="col-md-10 themed-grid-col">
-                @Model.SelectedKind
-            </div>
-        </div>
-    }
-    @if (Model.SelectedMood != null)
-    {
-        <div class="row mb-2 text-center">
-            <div class="col-md-10 themed-grid-col">
-                @Model.SelectedMood.ToString()
-            </div>
-        </div>
-    }
 </div>
