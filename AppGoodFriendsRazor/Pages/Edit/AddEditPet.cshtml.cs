@@ -37,10 +37,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
         public IEnumerable<string> ValidationErrorMsgs { get; set; }
         public IEnumerable<KeyValuePair<string, ModelStateEntry>> InvalidKeys { get; set; }
 
-        ////For Validation
-        //public reModelValidationResult ValidationResult { get; set; } = new reModelValidationResult(false, null, null);
-
-
 
         #region HTTP request
         public async Task<IActionResult> OnGet(Guid Id, Guid friendId)

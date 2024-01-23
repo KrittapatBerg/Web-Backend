@@ -21,7 +21,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
         [BindProperty]
         public string PageHeader { get; set; }
 
-
         [BindProperty]
         public Guid AnimalToEditID { get; set; }
 
@@ -57,7 +56,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
             return Page();
         }
 
-
         public async Task<IActionResult> OnPostSave()
         {
             string[] keys = { "FriendInput.FirstName",
@@ -70,12 +68,12 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 return Page();
             }
 
-            //First, are we creating a new Friend or editing another
+            //First, create a new Friend or edit another
             if (FriendInput.StatusIM == enStatusIM.Inserted)
             {
                 var fDto = new csFriendCUdto();
 
-                //create the Friend in the database
+                //create Friend in the database
                 fDto.FirstName = FriendInput.FirstName;
                 fDto.FirstName = FriendInput.LastName;
                 fDto.Email = FriendInput.Email;
@@ -99,13 +97,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 Country = FriendInput.Address.Country
             };
 
-
-
             //Do all updates for Pets
             IFriend f = await SavePets();
-
-            // Do all updates for Quotes
-            //f = await SaveQuotes();
 
             //Finally, update the friend itself
             f.FirstName = FriendInput.FirstName;
@@ -123,10 +116,9 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 Country = FriendInput.Address.Country
             };
 
-            // Uppdatera befintlig adress
+            // Update address
             var updatedAddress = await service.UpdateAddressAsync(usr, addressDto);
             f.Address = updatedAddress;
-
 
             var csFriendInstance = await service.UpdateFriendAsync(usr, new csFriendCUdto(f));
 
@@ -147,7 +139,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
         public IActionResult OnPostEditPet()
         {
-
             int idx = FriendInput.Pets.FindIndex(a => a.PetId == AnimalToEditID);
             string[] keys = { $"FriendInput.Pets[{idx}].editName",
                               $"FriendInput.Pets[{idx}].editKind",
@@ -158,9 +149,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 ValidationResult = validationResult;
                 return Page();
             }
-
-
-
 
             //Set the pets as Modified, it will later be updated in the database
             var p = FriendInput.Pets.FirstOrDefault(a => a.PetId == AnimalToEditID);
@@ -204,8 +192,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 return Page();
             }
 
-
-
             //Set the pet as Inserted, it will later be inserted in the database
             FriendInput.NewPet.StatusIM = enStatusIM.Inserted;
 
@@ -216,12 +202,10 @@ namespace AppGoodFriendsRazor.Pages.Edit
             //Add it to the Input Models pets
             FriendInput.Pets.Add(new csPetIM(FriendInput.NewPet));
 
-
-
             //Clear the NewPet so another pet can be added
             FriendInput.NewPet = new csPetIM();
 
-            csPetCUdto ny = new csPetCUdto
+            csPetCUdto newPet = new csPetCUdto
             {
                 FriendId = FriendInput.FriendId,
                 Kind = FriendInput.NewPet.Kind,
@@ -230,7 +214,7 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
             };
 
-            var newF = await service.CreatePetAsync(usr, ny);
+            var newF = await service.CreatePetAsync(usr, newPet);
 
             return Redirect($"~/Friend/FriendDetail?id={FriendInput.FriendId}");
         }
@@ -245,8 +229,8 @@ namespace AppGoodFriendsRazor.Pages.Edit
 
             //Check if there are any new pets added, if so create them in the database
             var newPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Inserted));
-            var pf = await service.ReadFriendAsync(usr, FriendInput.FriendId, false);
-            var dtopF = new csFriendCUdto(pf);
+            var rf = await service.ReadFriendAsync(usr, FriendInput.FriendId, false);
+            var nRf = new csFriendCUdto(rf);
             foreach (var item in newPets)
             {
                 //Create the corresposning model and CUdto objects
@@ -257,14 +241,13 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 cuDto.FriendId = FriendInput.FriendId;
                 model = await service.CreatePetAsync(usr, cuDto);
 
-                dtopF.PetsId.Add(model.PetId);
+                nRf.PetsId.Add(model.PetId);
 
             }
 
             //To update modified and deleted pets, lets first read the original
             //Note that now the deleted pets will be removed and created pets will be nicely included
-            var f = await service.UpdateFriendAsync(usr, dtopF);
-
+            var f = await service.UpdateFriendAsync(usr, nRf);
 
             //Check if there are any modified pets , if so update them in the database
             var modifiedPets = FriendInput.Pets.FindAll(p => (p.StatusIM == enStatusIM.Modified));
@@ -477,7 +460,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
             [Required(ErrorMessage = "You must enter an Name")]
             public string editName { get; set; }
 
-
             public IPet UpdateModel(IPet model)
             {
                 model.PetId = this.PetId;
@@ -496,7 +478,6 @@ namespace AppGoodFriendsRazor.Pages.Edit
                 Name = original.Name;
 
                 editName = original.editName;
-
             }
             public csPetIM(IPet model)
             {

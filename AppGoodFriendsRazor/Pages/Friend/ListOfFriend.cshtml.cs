@@ -16,7 +16,6 @@ namespace AppGoodFriendsRazor.Pages.Friend
 
         public async Task<IActionResult> OnGetAsync()
         {
-
             var idList = Request.Query["idList"].ToString();
 
             var friendsList = await service.ReadFriendsAsync(usr, true, false, "", 0, 100);
@@ -25,11 +24,8 @@ namespace AppGoodFriendsRazor.Pages.Friend
             FriendsList = friendInCity;
 
             return Page();
-
         }
 
-        //TODO: Work on search and Pagination if there's time.
-        //Dont forget about the <a href> tag  
         #region Inject service
         public ListOfFriendModel(IFriendsService service, ILogger<ListOfFriendModel> logger)
         {

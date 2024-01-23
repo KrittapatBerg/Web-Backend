@@ -13,6 +13,8 @@ namespace AppGoodFriendsRazor.Pages
 
         public async Task OnGet()
         {
+            //A push start from Martin 
+
             var info = await _service.InfoAsync;
             var friends = info.Friends;
             var pets = info.Pets;
@@ -20,41 +22,13 @@ namespace AppGoodFriendsRazor.Pages
             var friendsByCountry = friends.GroupBy(f => f.Country);
             foreach (var item in friendsByCountry)
             {
-                //We start with this and build on it 
-                //var country = item.Key;
-                //var friendsInCountry = item.Where(f => f.City != null).ToList();
 
                 var f = new FriendsByCountry();
                 f.Countries = item.Key;
                 f.Cities = item.Where(f => f.City != null).ToList();
 
                 FriendsByCountries.Add(f);
-
             }
-
-            //From ChatGPT
-            var petList = friends
-                         .GroupJoin(pets, f => f.City, p => p.City, (f, petGroup) => new
-                         {
-                             City = f.City,
-                             NrFriends = f.NrFriends,
-                             NrPets = petGroup.Count(), // Count the number of pets in the group
-                             Pets = petGroup.ToList()
-                         });
-
-            foreach (var pet in petList)
-            {
-                var hasPet = new FriendPetByCity
-                {
-                    City = pet.City,
-                    NrFriends = pet.NrFriends,
-                    NrPets = pet.NrPets,
-                    Pets = pet.Pets
-                };
-
-                FriendPetByCities.Add(hasPet);
-            }
-
         }
 
         public class FriendsByCountry

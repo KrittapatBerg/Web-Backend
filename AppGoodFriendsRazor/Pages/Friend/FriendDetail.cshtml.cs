@@ -27,10 +27,10 @@ namespace AppGoodFriendsRazor.Pages.Friend
                     return Page();
                 }
 
-                Guid _id = Guid.Parse(idQuery);
+                Guid id = Guid.Parse(idQuery);
 
                 //Use the Service
-                FriendDetail = await service.ReadFriendAsync(usr, _id, false);
+                FriendDetail = await service.ReadFriendAsync(usr, id, false);
                 if (FriendDetail == null)
                 {
                     ErrorMessage = "No friend found with the provided ID.";
@@ -42,17 +42,7 @@ namespace AppGoodFriendsRazor.Pages.Friend
                 ErrorMessage = e.Message;
             }
             return Page();
-            //if (Guid.TryParse(Request.Query["id"], out Guid id))
-            //{
-            //    //Read a friend
-            //    FriendDetail = await service.ReadFriendAsync(usr, id, false)
-            //        ?? throw new Exception("Friend not found.");
-            //}
-            //else
-            //{
-            //    ModelState.AddModelError(string.Empty, "Whoops, friend does not exist.");
-            //}
-            //return Page();
+
         }
 
         #region Constructor and inject service

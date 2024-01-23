@@ -17,30 +17,5 @@
             </p>
             <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
         </div>
-
-      
-
-        @* <h1>Friends and Pets by Country and City</h1>
-
-        <!-- Display Friends by Country -->
-        <h2>Friends by Country</h2>
-        @foreach (var friendsByCountry in Model.FriendsByCountries)
-        {
-            <h3>@friendsByCountry.Countries</h3>
-            @foreach (var friend in friendsByCountry.Cities)
-            {
-                <p>@friend.NrFriends in @friend.City</p>
-            }
-        }
-
-        <!-- Display Friends and Pets by City -->
-        <h2>Friends and Pets by City</h2>
-        @foreach (var friendPetByCity in Model.FriendPetByCities)
-        {
-            <h3>@friendPetByCity.City</h3>
-            <p> @friendPetByCity.NrFriends friends</p>
-            <p> and @friendPetByCity.NrPets pets </p>
-         
-        }*@
     </div> 
 </div>

@@ -11,10 +11,6 @@ namespace AppGoodFriendsRazor.Pages.Friend
 
         public List<FriendsByCountry> FriendsByCountries = new List<FriendsByCountry>();
 
-        //public List<IFriend> Friends { get; set; } = new List<IFriend>();
-        //public List<CountryForFriend> Countries { get; set; } = new List<CountryForFriend>();
-
-
         #region Inject service 
         public FriendsByCountryModel(IFriendsService service)
         {
@@ -42,7 +38,6 @@ namespace AppGoodFriendsRazor.Pages.Friend
 
                 FriendsByCountries.Add(f);
             }
-
             return Page();
         }
 
